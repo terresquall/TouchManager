@@ -218,13 +218,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a5aca869dd99d419777bc76fa88dc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnedPrefabs:
+  - {fileID: 8759425888166923734, guid: 121923fb50a561d418aaaba9850f3fb2, type: 3}
+  - {fileID: 6227700680845120463, guid: fd8ae4fca3cd77b4b9c50a56cf378d0f, type: 3}
+  - {fileID: 1220913015188394215, guid: bdf8cd8ba137a59419adabc68baa5262, type: 3}
+  spawnInterval: 1.5
+  intervalVariance: 1
   spawnArea:
     serializedVersion: 2
     x: 0
-    y: 5
+    y: -5.5
     width: 17.73585
     height: 1
-  camera: {fileID: 1988429883}
 --- !u!114 &1988429886
 MonoBehaviour:
   m_ObjectHideFlags: 0

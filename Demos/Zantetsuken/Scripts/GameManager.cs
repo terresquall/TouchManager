@@ -5,9 +5,36 @@ using UnityEngine;
 namespace Terresquall.Zantetsuken {
     [RequireComponent(typeof(Camera))]
     public class GameManager : MonoBehaviour {
-        
-        public Camera camera;
+
+        public GameObject[] spawnedPrefabs;
+        public float spawnInterval = 1.5f, intervalVariance = 1f;
         public Rect spawnArea;
+
+        float currentSpawnCooldown;
+        const float SPAWN_AREA_HEIGHT = 1f;
+
+        void Update() {
+            if(currentSpawnCooldown > 0)
+                currentSpawnCooldown -= Time.deltaTime;
+            else {
+                currentSpawnCooldown += spawnInterval + Random.Range(0,intervalVariance);
+                Vector2 spawnPos = GetRandomSpawnPosition();
+                Instantiate(
+                    spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)],
+                    (Vector2)transform.position + spawnPos,
+                    Quaternion.Euler(0,0,-45f * spawnPos.x / (spawnArea.size.x / 2f))
+                );
+            }
+        }
+
+        // Generates a random spawn position centred around the origin.
+        public Vector2 GetRandomSpawnPosition() {
+            float hw = spawnArea.size.x * 0.5f, hh = spawnArea.size.y * 0.5f;
+            return spawnArea.position + new Vector2(
+                Random.Range(-hw, hw),
+                Random.Range(-hh, hh)
+            );
+        }
 
         void OnDrawGizmosSelected() {
             if(spawnArea.size.sqrMagnitude > 0) {
@@ -31,10 +58,9 @@ namespace Terresquall.Zantetsuken {
         }
 
         void Reset() {
-            camera = GetComponent<Camera>();
-            spawnArea.y = camera.orthographicSize + ;
-            spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, 1);
+            Camera camera = GetComponent<Camera>();
+            spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
+            spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
         }
-
     }
 }

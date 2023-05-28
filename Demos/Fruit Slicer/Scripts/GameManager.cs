@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Terresquall.Zantetsuken {
+namespace Terresquall.FruitSlicer {
     [RequireComponent(typeof(Camera))]
     public class GameManager : MonoBehaviour {
 
@@ -22,7 +22,7 @@ namespace Terresquall.Zantetsuken {
                 Instantiate(
                     spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)],
                     (Vector2)transform.position + spawnPos,
-                    Quaternion.Euler(0,0,-45f * spawnPos.x / (spawnArea.size.x / 2f))
+                    Quaternion.Euler(0,0,45f * spawnPos.x / (spawnArea.size.x / 2f))
                 );
             }
         }

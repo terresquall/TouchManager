@@ -268,10 +268,10 @@ namespace Terresquall {
 				Vector2 swipeDirNorm = swipeDir.normalized;
 
 				Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
-				Ray2D swipeRayCast2D = new Ray2D(startPoint, swipeDirNorm);
+				Ray2D swipeRaycast2D = new Ray2D(startPoint, swipeDirNorm);
 
                 RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
-				RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast.origin, swipeRaycast.direction, swipeDir.magnitude, affectedLayers);
+				RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
 
 				foreach (RaycastHit hit in swipeHit)
 				{

@@ -19,6 +19,9 @@ namespace Terresquall {
 		const string VERSION = "0.1.0";
 		const string DATE = "1 May 2023";
 
+		bool isSwiping = false;
+		Vector2 startPoint, currentPoint;
+
 		// Start is called before the first frame update
 		void Start() 
 		{
@@ -33,7 +36,8 @@ namespace Terresquall {
 		// Update is called once per frame
 		void Update() 
 		{
-			InputHandler();           
+			InputHandler();
+			SwipeDetection();
         }
 			
 		void InputHandler() // to handle both the touch and the mouse input
@@ -86,7 +90,8 @@ namespace Terresquall {
 			switch (t.phase)
 			{
 				case TouchPhase.Began:
-
+					isSwiping = true;
+					startPoint = t.position;
 					// Call OnTouchTap2D on 2D objects.
 					if (detectionMode != DetectionMode.physics)
 					{
@@ -135,7 +140,10 @@ namespace Terresquall {
 					break;
 
 				case TouchPhase.Moved:
-
+					if(isSwiping)
+					{
+						currentPoint = t.position;
+					}
 					// Detect swipes with 2D colliders.
 					if (detectionMode != DetectionMode.physics)
 					{
@@ -207,7 +215,11 @@ namespace Terresquall {
 
 				case TouchPhase.Ended:
 				case TouchPhase.Canceled:
-
+					if(isSwiping)
+					{
+						currentPoint = t.position;
+						isSwiping = false;
+					}
 					// Call OnSwipeExit2D / OnTouchUntap2D on 2D objects.
 					if (detectionMode != DetectionMode.physics)
 					{
@@ -247,6 +259,30 @@ namespace Terresquall {
 					touchIds.Remove(t.fingerId);
 					break;
 			}
+		}
+		void SwipeDetection()
+		{
+			if(isSwiping)
+			{
+				Vector2 swipeDir = currentPoint - startPoint;
+				Vector2 swipeDirNorm = swipeDir.normalized;
+
+				Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
+				Ray2D swipeRayCast2D = new Ray2D(startPoint, swipeDirNorm);
+
+                RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
+				RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast.origin, swipeRaycast.direction, swipeDir.magnitude, affectedLayers);
+
+				foreach (RaycastHit hit in swipeHit)
+				{
+					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+				}
+				foreach (RaycastHit2D hit in swipeHit2D)
+				{
+					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+			
 		}
 	}
 }

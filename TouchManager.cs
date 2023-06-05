@@ -22,6 +22,9 @@ namespace Terresquall {
 		bool isSwiping = false;
 		Vector2 startPoint, currentPoint;
 		[SerializeField] GameObject trailHolder;
+		[SerializeField] GameObject bladeTrail;
+		[SerializeField] Material[] trailMaterials;
+		public int trailMatIndex;
 
         // Start is called before the first frame update
         void Start() 
@@ -40,7 +43,6 @@ namespace Terresquall {
 			InputHandler();
 			SwipeDetection();
 
-			
         }
 			
 		void InputHandler() // to handle both the touch and the mouse input
@@ -82,6 +84,12 @@ namespace Terresquall {
 
                 AfterInput(mouseTouch);
             }
+
+			//changing skin
+			if(Input.GetKeyDown(KeyCode.L))
+			{
+				ChangeSkin();
+			}
 
 
         }
@@ -293,6 +301,19 @@ namespace Terresquall {
                 trailHolder.transform.position = inputPosition2D;
             }
 
+		}
+		void ChangeSkin()
+		{
+			TrailRenderer trail = GetComponentInChildren<TrailRenderer>();
+            if (trailMatIndex < trailMaterials.Length -1)
+            {
+                trailMatIndex++;
+            }
+            else
+            {
+                trailMatIndex = 0;
+            }
+			trail.material = trailMaterials[trailMatIndex];
 		}
 	}
 }

@@ -21,9 +21,10 @@ namespace Terresquall {
 
 		bool isSwiping = false;
 		Vector2 startPoint, currentPoint;
+		[SerializeField] GameObject trailHolder;
 
-		// Start is called before the first frame update
-		void Start() 
+        // Start is called before the first frame update
+        void Start() 
 		{
 
 		}
@@ -38,6 +39,8 @@ namespace Terresquall {
 		{
 			InputHandler();
 			SwipeDetection();
+
+			
         }
 			
 		void InputHandler() // to handle both the touch and the mouse input
@@ -261,7 +264,7 @@ namespace Terresquall {
 			}
 		}
 		void SwipeDetection()
-		{
+		{			
 			if(isSwiping)
 			{
 				Vector2 swipeDir = currentPoint - startPoint;
@@ -273,16 +276,23 @@ namespace Terresquall {
                 RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
 				RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
 
-				foreach (RaycastHit hit in swipeHit)
+				foreach (RaycastHit hit in swipeHit) // for 3d
 				{
 					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
 				}
-				foreach (RaycastHit2D hit in swipeHit2D)
+				foreach (RaycastHit2D hit in swipeHit2D) // for 2d
 				{
 					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
                 }
+
+				//trail rendering
+				Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
+                Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
+
+                trailHolder.transform.position = inputPosition;
+                trailHolder.transform.position = inputPosition2D;
             }
-			
+
 		}
 	}
 }

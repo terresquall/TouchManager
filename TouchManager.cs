@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Terresquall {
@@ -22,17 +23,17 @@ namespace Terresquall {
 		bool isSwiping = false;
 		Vector2 startPoint, currentPoint;
 		[SerializeField] GameObject trailHolder;
-		[SerializeField] GameObject bladeTrail;
-		[SerializeField] Material[] trailMaterials;
+		//[SerializeField] GameObject bladeTrail;
+		[SerializeField] GameObject[] trails;
 		public int trailMatIndex;
 
         // Start is called before the first frame update
-        void Start() 
-		{
+        private void Awake()
+        {
+            Instantiate(trails[trailMatIndex], trailHolder.transform);
+        }
 
-		}
-
-		void Reset() 
+        void Reset() 
 		{
 			camera = GetComponentInChildren<Camera>();
 		}
@@ -42,7 +43,7 @@ namespace Terresquall {
 		{
 			InputHandler();
 			SwipeDetection();
-
+			//Trail.material = trails[trailMatIndex];
         }
 			
 		void InputHandler() // to handle both the touch and the mouse input
@@ -88,7 +89,7 @@ namespace Terresquall {
 			//changing skin
 			if(Input.GetKeyDown(KeyCode.L))
 			{
-				ChangeSkin();
+                ChangeSkin();
 			}
 
 
@@ -269,7 +270,8 @@ namespace Terresquall {
 
 					touchIds.Remove(t.fingerId);
 					break;
-			}
+
+            }
 		}
 		void SwipeDetection()
 		{			
@@ -304,16 +306,19 @@ namespace Terresquall {
 		}
 		void ChangeSkin()
 		{
-			TrailRenderer trail = GetComponentInChildren<TrailRenderer>();
-            if (trailMatIndex < trailMaterials.Length -1)
+            foreach (Transform child in trailHolder.transform)
             {
-                trailMatIndex++;
+                GameObject.Destroy(child.gameObject);
+            }
+            if (trailMatIndex < trails.Length -1)
+            {				
+                trailMatIndex++;				
             }
             else
             {
                 trailMatIndex = 0;
             }
-			trail.material = trailMaterials[trailMatIndex];
-		}
+            Instantiate(trails[trailMatIndex], trailHolder.transform);
+        }
 	}
 }

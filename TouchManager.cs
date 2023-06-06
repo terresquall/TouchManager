@@ -75,6 +75,7 @@ namespace Terresquall {
                 mouseTouch.phase = TouchPhase.Ended;
 
                 AfterInput(mouseTouch);
+                startPoint = currentPoint;
             }
             else if (Input.GetMouseButton(0))
             {
@@ -274,7 +275,7 @@ namespace Terresquall {
             }
 		}
 		void SwipeDetection()
-		{			
+		{	
 			if(isSwiping)
 			{
 				Vector2 swipeDir = currentPoint - startPoint;

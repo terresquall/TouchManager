@@ -23,14 +23,14 @@ namespace Terresquall {
 		bool isSwiping = false;
 		Vector2 startPoint, currentPoint;
 		[SerializeField] GameObject trailHolder;
-		//[SerializeField] GameObject bladeTrail;
+		GameObject _trailHolder;
 		[SerializeField] GameObject[] trails;
 		public int trailMatIndex;
 
         // Start is called before the first frame update
         private void Awake()
         {
-            Instantiate(trails[trailMatIndex], trailHolder.transform);
+            //Instantiate(trails[trailMatIndex], trailHolder.transform);
         }
 
         void Reset() 
@@ -42,7 +42,7 @@ namespace Terresquall {
 		void Update() 
 		{
 			InputHandler();
-			SwipeDetection();
+			//SwipeDetection();
 			//Trail.material = trails[trailMatIndex];
         }
 			
@@ -60,6 +60,10 @@ namespace Terresquall {
             }
             else if (Input.GetMouseButtonDown(0)) //mouse input
             {
+                _trailHolder = Instantiate(trailHolder, transform);
+                GameObject _trailObject = Instantiate(trails[trailMatIndex]);
+                _trailObject.transform.SetParent(_trailHolder.transform);
+				
                 Touch mouseTouch = new Touch();
                 mouseTouch.fingerId = -1;
                 mouseTouch.position = Input.mousePosition;
@@ -75,7 +79,6 @@ namespace Terresquall {
                 mouseTouch.phase = TouchPhase.Ended;
 
                 AfterInput(mouseTouch);
-                startPoint = currentPoint;
             }
             else if (Input.GetMouseButton(0))
             {
@@ -102,7 +105,9 @@ namespace Terresquall {
 
 			switch (t.phase)
 			{
-				case TouchPhase.Began:
+				case TouchPhase.Began:                    
+
+                    startPoint = currentPoint;
 					isSwiping = true;
 					startPoint = t.position;
 					// Call OnTouchTap2D on 2D objects.
@@ -125,7 +130,36 @@ namespace Terresquall {
 						}
 					}
 
-					touchIds.Add(t.fingerId);
+					//handle the inbetween swipe
+                    if (isSwiping)
+                    {
+                        Vector2 swipeDir = currentPoint - startPoint;
+                        Vector2 swipeDirNorm = swipeDir.normalized;
+
+                        Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
+                        Ray2D swipeRaycast2D = new Ray2D(startPoint, swipeDirNorm);
+
+                        RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
+                        RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
+
+                        foreach (RaycastHit hit in swipeHit) // for 3d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+                        foreach (RaycastHit2D hit in swipeHit2D) // for 2d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+
+                        //trail rendering
+                        Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
+                        Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
+
+                        _trailHolder.transform.position = inputPosition;
+                        _trailHolder.transform.position = inputPosition2D;
+                    }
+
+                    touchIds.Add(t.fingerId);
 					break;
 
 				case TouchPhase.Stationary:
@@ -150,7 +184,36 @@ namespace Terresquall {
 						}
 					}
 
-					break;
+					//handle the inbetween swipe
+                    if (isSwiping)
+                    {
+                        Vector2 swipeDir = currentPoint - startPoint;
+                        Vector2 swipeDirNorm = swipeDir.normalized;
+
+                        Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
+                        Ray2D swipeRaycast2D = new Ray2D(startPoint, swipeDirNorm);
+
+                        RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
+                        RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
+
+                        foreach (RaycastHit hit in swipeHit) // for 3d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+                        foreach (RaycastHit2D hit in swipeHit2D) // for 2d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+
+                        //trail rendering
+                        Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
+                        Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
+
+                        _trailHolder.transform.position = inputPosition;
+                        _trailHolder.transform.position = inputPosition2D;
+                    }
+
+                    break;
 
 				case TouchPhase.Moved:
 					if(isSwiping)
@@ -224,7 +287,36 @@ namespace Terresquall {
 							swiped.Remove(go);
 						}
 					}
-					break;
+					//handle the inbetween swipe
+                    if (isSwiping)
+                    {
+                        Vector2 swipeDir = currentPoint - startPoint;
+                        Vector2 swipeDirNorm = swipeDir.normalized;
+
+                        Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
+                        Ray2D swipeRaycast2D = new Ray2D(startPoint, swipeDirNorm);
+
+                        RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
+                        RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
+
+                        foreach (RaycastHit hit in swipeHit) // for 3d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+                        foreach (RaycastHit2D hit in swipeHit2D) // for 2d
+                        {
+                            hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
+                        }
+
+                        //trail rendering
+                        Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
+                        Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
+
+                        _trailHolder.transform.position = inputPosition;
+                        _trailHolder.transform.position = inputPosition2D;
+                    }
+
+                    break;
 
 				case TouchPhase.Ended:
 				case TouchPhase.Canceled:
@@ -268,42 +360,19 @@ namespace Terresquall {
 							}
 						}
 					}
-
-					touchIds.Remove(t.fingerId);
+                    startPoint = currentPoint;
+                    touchIds.Remove(t.fingerId);
+                    foreach (Transform trailHolder in transform)
+                    {
+                        foreach (Transform trail in trailHolder.transform)
+                        {
+                            Destroy(trail.gameObject);
+                        }
+                        Destroy(trailHolder.gameObject);                       
+                    }
+					
 					break;
-
             }
-		}
-		void SwipeDetection()
-		{	
-			if(isSwiping)
-			{
-				Vector2 swipeDir = currentPoint - startPoint;
-				Vector2 swipeDirNorm = swipeDir.normalized;
-
-				Ray swipeRaycast = camera.ScreenPointToRay(startPoint);
-				Ray2D swipeRaycast2D = new Ray2D(startPoint, swipeDirNorm);
-
-                RaycastHit[] swipeHit = Physics.RaycastAll(swipeRaycast, swipeDir.magnitude, affectedLayers);
-				RaycastHit2D[] swipeHit2D = Physics2D.RaycastAll(swipeRaycast2D.origin, swipeRaycast2D.direction, swipeDir.magnitude, affectedLayers);
-
-				foreach (RaycastHit hit in swipeHit) // for 3d
-				{
-					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
-				}
-				foreach (RaycastHit2D hit in swipeHit2D) // for 2d
-				{
-					hit.collider.gameObject.SendMessage("OnSwipeDetection", SendMessageOptions.DontRequireReceiver);
-                }
-
-				//trail rendering
-				Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
-                Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
-
-                trailHolder.transform.position = inputPosition;
-                trailHolder.transform.position = inputPosition2D;
-            }
-
 		}
 		void ChangeSkin()
 		{
@@ -319,7 +388,7 @@ namespace Terresquall {
             {
                 trailMatIndex = 0;
             }
-            Instantiate(trails[trailMatIndex], trailHolder.transform);
+            //Instantiate(trails[trailMatIndex], trailHolder.transform);
         }
 	}
 }

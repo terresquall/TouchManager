@@ -13,6 +13,9 @@ namespace Terresquall.FruitSlicer {
         float currentSpawnCooldown;
         const float SPAWN_AREA_HEIGHT = 1f;
 
+        public GameObject[] trails;
+        public int trailMatIndex;
+
         void Update() {
             if(currentSpawnCooldown > 0)
                 currentSpawnCooldown -= Time.deltaTime;
@@ -62,5 +65,7 @@ namespace Terresquall.FruitSlicer {
             spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
             spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
         }
+
+        
     }
 }

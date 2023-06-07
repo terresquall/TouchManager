@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Terresquall.FruitSlicer;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,13 +25,13 @@ namespace Terresquall {
 		Vector2 startPoint, currentPoint;
 		[SerializeField] GameObject trailHolder;
 		GameObject _trailHolder;
-		[SerializeField] GameObject[] trails;
-		public int trailMatIndex;
+		GameManager gameManager;
+		
 
         // Start is called before the first frame update
         private void Awake()
         {
-            //Instantiate(trails[trailMatIndex], trailHolder.transform);
+			gameManager = GetComponent<GameManager>();
         }
 
         void Reset() 
@@ -61,7 +62,7 @@ namespace Terresquall {
             else if (Input.GetMouseButtonDown(0)) //mouse input
             {
                 _trailHolder = Instantiate(trailHolder, transform);
-                GameObject _trailObject = Instantiate(trails[trailMatIndex]);
+                GameObject _trailObject = Instantiate(gameManager.trails[gameManager.trailMatIndex]);
                 _trailObject.transform.SetParent(_trailHolder.transform);
 				
                 Touch mouseTouch = new Touch();
@@ -369,25 +370,24 @@ namespace Terresquall {
                             Destroy(trail.gameObject);
                         }
                         Destroy(trailHolder.gameObject);                       
-                    }
-					
+                    }					
 					break;
             }
 		}
 		void ChangeSkin()
 		{
-            foreach (Transform child in trailHolder.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-            if (trailMatIndex < trails.Length -1)
-            {				
-                trailMatIndex++;				
-            }
-            else
-            {
-                trailMatIndex = 0;
-            }
+            //foreach (Transform child in trailHolder.transform)
+            //{
+            //    Destroy(child.gameObject);
+            //}
+            //if (trailMatIndex < trails.Length -1)
+            //{				
+            //    trailMatIndex++;				
+            //}
+            //else
+            //{
+            //    trailMatIndex = 0;
+            //}
             //Instantiate(trails[trailMatIndex], trailHolder.transform);
         }
 	}

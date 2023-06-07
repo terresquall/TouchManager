@@ -295,6 +295,13 @@ MonoBehaviour:
     y: -5.5
     width: 17.73585
     height: 1
+  trails:
+  - {fileID: 8384537494272528029, guid: 7c645990fdb05cc4985118ad5f766f00, type: 3}
+  - {fileID: 662360939436711298, guid: e025a800465ad65439449817e0b7084d, type: 3}
+  - {fileID: 662360939436711298, guid: 354f9c59623e6924db3e8f88e8b3f076, type: 3}
+  - {fileID: 662360939436711298, guid: b175d2bccd8eb984d80e48f3cf3b4648, type: 3}
+  - {fileID: 6896115186343531196, guid: 345cfdd1ab31920459a7d9018f634a79, type: 3}
+  trailMatIndex: 0
 --- !u!114 &1988429886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,10 +320,3 @@ MonoBehaviour:
     m_Bits: 4294967295
   detectionMode: 0
   trailHolder: {fileID: 7654929618367248701, guid: 1b1ff73db93ddaa4cac94a1d8d26d7c7, type: 3}
-  trails:
-  - {fileID: 8384537494272528029, guid: 7c645990fdb05cc4985118ad5f766f00, type: 3}
-  - {fileID: 662360939436711298, guid: e025a800465ad65439449817e0b7084d, type: 3}
-  - {fileID: 662360939436711298, guid: 354f9c59623e6924db3e8f88e8b3f076, type: 3}
-  - {fileID: 662360939436711298, guid: b175d2bccd8eb984d80e48f3cf3b4648, type: 3}
-  - {fileID: 6896115186343531196, guid: 345cfdd1ab31920459a7d9018f634a79, type: 3}
-  trailMatIndex: 0

@@ -7,6 +7,13 @@ namespace Terresquall.FruitSlicer {
     [RequireComponent(typeof(Camera))]
     public class FruitNinjaGameManager : MonoBehaviour {
 
+        public enum Scene
+        {
+            Menu,
+            Game
+        }
+        public Scene fnScene;
+
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
         public Rect spawnArea;
@@ -22,16 +29,25 @@ namespace Terresquall.FruitSlicer {
 
         public TextMeshProUGUI scoreText;
 
-        void Update() {
-            if(currentSpawnCooldown > 0)
+        void Update() 
+        {
+            if(fnScene == Scene.Game)
+            {
+                SpawnFruit();
+            }
+        }
+        void SpawnFruit()
+        {
+            if (currentSpawnCooldown > 0)
                 currentSpawnCooldown -= Time.deltaTime;
-            else {
-                currentSpawnCooldown += spawnInterval + Random.Range(0,intervalVariance);
+            else
+            {
+                currentSpawnCooldown += spawnInterval + Random.Range(0, intervalVariance);
                 Vector2 spawnPos = GetRandomSpawnPosition();
                 Instantiate(
                     spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)],
                     (Vector2)transform.position + spawnPos,
-                    Quaternion.Euler(0,0,45f * spawnPos.x / (spawnArea.size.x / 2f))
+                    Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
                 );
             }
         }
@@ -83,8 +99,6 @@ namespace Terresquall.FruitSlicer {
                     scoreText.text = score.ToString();
                 }
             }
-        }
-
-        
+        }       
     }
 }

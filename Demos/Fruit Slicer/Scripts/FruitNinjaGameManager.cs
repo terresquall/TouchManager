@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Terresquall.FruitSlicer {
     [RequireComponent(typeof(Camera))]
-    public class GameManager : MonoBehaviour {
+    public class FruitNinjaGameManager : MonoBehaviour {
 
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
@@ -15,6 +16,11 @@ namespace Terresquall.FruitSlicer {
 
         public GameObject[] trails;
         public int trailMatIndex;
+
+        //game stuff
+        public int score;
+
+        public TextMeshProUGUI scoreText;
 
         void Update() {
             if(currentSpawnCooldown > 0)
@@ -64,6 +70,19 @@ namespace Terresquall.FruitSlicer {
             Camera camera = GetComponent<Camera>();
             spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
             spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
+        }
+
+        public int Score
+        {
+            get { return score; }
+            set
+            {
+                if (score != value)
+                {
+                    score = value;
+                    scoreText.text = score.ToString();
+                }
+            }
         }
 
         

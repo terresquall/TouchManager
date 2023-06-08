@@ -8,7 +8,16 @@ namespace Terresquall {
 	[RequireComponent(typeof(Camera))]
 	public class TouchManager : MonoBehaviour {
 
-		List<int> touchIds = new List<int>();
+		public enum GameMode
+		{
+			FruitNinja,
+			Other
+		}
+		[Header("Game selector")]
+		public GameMode currentGameMode;
+		[Space(5)]
+
+        List<int> touchIds = new List<int>();
 		public new Camera camera;
 		public LayerMask affectedLayers = ~0;
 
@@ -25,13 +34,17 @@ namespace Terresquall {
 		Vector2 startPoint, currentPoint;
 		[SerializeField] GameObject trailHolder;
 		GameObject _trailHolder;
-		GameManager gameManager;
+		FruitNinjaGameManager fruitNinjaGameManager;
 		
 
         // Start is called before the first frame update
         private void Awake()
         {
-			gameManager = GetComponent<GameManager>();
+			if(currentGameMode == GameMode.FruitNinja)
+			{
+                fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();
+            }
+			
         }
 
         void Reset() 
@@ -43,8 +56,6 @@ namespace Terresquall {
 		void Update() 
 		{
 			InputHandler();
-			//SwipeDetection();
-			//Trail.material = trails[trailMatIndex];
         }
 			
 		void InputHandler() // to handle both the touch and the mouse input
@@ -61,9 +72,12 @@ namespace Terresquall {
             }
             else if (Input.GetMouseButtonDown(0)) //mouse input
             {
-                _trailHolder = Instantiate(trailHolder, transform);
-                GameObject _trailObject = Instantiate(gameManager.trails[gameManager.trailMatIndex]);
-                _trailObject.transform.SetParent(_trailHolder.transform);
+				if(currentGameMode == GameMode.FruitNinja)
+				{
+                    _trailHolder = Instantiate(trailHolder, transform);
+                    GameObject _trailObject = Instantiate(fruitNinjaGameManager.trails[fruitNinjaGameManager.trailMatIndex]);
+                    _trailObject.transform.SetParent(_trailHolder.transform);
+                }                
 				
                 Touch mouseTouch = new Touch();
                 mouseTouch.fingerId = -1;
@@ -90,13 +104,6 @@ namespace Terresquall {
 
                 AfterInput(mouseTouch);
             }
-
-			//changing skin
-			if(Input.GetKeyDown(KeyCode.L))
-			{
-                ChangeSkin();
-			}
-
 
         }
 		void AfterInput(Touch t) // called after the input has been detected
@@ -127,7 +134,7 @@ namespace Terresquall {
 						RaycastHit[] hits = Physics.RaycastAll(r, Mathf.Infinity, affectedLayers);
 						foreach (RaycastHit h in hits)
 						{
-							h.collider.gameObject.SendMessage("OnTouchTap", t, SendMessageOptions.DontRequireReceiver);
+                            h.collider.gameObject.SendMessage("OnTouchTap", t, SendMessageOptions.DontRequireReceiver);
 						}
 					}
 
@@ -171,7 +178,7 @@ namespace Terresquall {
 						RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(r, Mathf.Infinity, affectedLayers);
 						foreach (RaycastHit2D h in hits)
 						{
-							h.collider.gameObject.SendMessage("OnTouchHold2D", t, SendMessageOptions.DontRequireReceiver);
+                            h.collider.gameObject.SendMessage("OnTouchHold2D", t, SendMessageOptions.DontRequireReceiver);
 						}
 					}
 
@@ -181,7 +188,7 @@ namespace Terresquall {
 						RaycastHit[] hits = Physics.RaycastAll(r, Mathf.Infinity, affectedLayers);
 						foreach (RaycastHit h in hits)
 						{
-							h.collider.gameObject.SendMessage("OnTouchHold", t, SendMessageOptions.DontRequireReceiver);
+                            h.collider.gameObject.SendMessage("OnTouchHold", t, SendMessageOptions.DontRequireReceiver);
 						}
 					}
 
@@ -234,7 +241,7 @@ namespace Terresquall {
 						{
 							if (swiped2D.Contains(h.collider.gameObject))
 							{
-								h.collider.gameObject.SendMessage("OnSwipeStay2D", t, SendMessageOptions.DontRequireReceiver);
+                                h.collider.gameObject.SendMessage("OnSwipeStay2D", t, SendMessageOptions.DontRequireReceiver);
 							}
 							else
 							{
@@ -268,7 +275,7 @@ namespace Terresquall {
 						{
 							if (swiped.Contains(h.collider.gameObject))
 							{
-								h.collider.gameObject.SendMessage("OnSwipeStay", t, SendMessageOptions.DontRequireReceiver);
+                                h.collider.gameObject.SendMessage("OnSwipeStay", t, SendMessageOptions.DontRequireReceiver);
 							}
 							else
 							{
@@ -334,8 +341,8 @@ namespace Terresquall {
 						{
 							if (swiped2D.Contains(h.collider.gameObject))
 							{
-								swiped2D.Remove(h.collider.gameObject);
-								h.collider.gameObject.SendMessage("OnSwipeExit2D", t, SendMessageOptions.DontRequireReceiver);
+                                swiped2D.Remove(h.collider.gameObject);
+								h.collider.gameObject.SendMessage("OnSwipeExit2D", t, SendMessageOptions.DontRequireReceiver);								
 							}
 							else
 							{
@@ -374,21 +381,5 @@ namespace Terresquall {
 					break;
             }
 		}
-		void ChangeSkin()
-		{
-            //foreach (Transform child in trailHolder.transform)
-            //{
-            //    Destroy(child.gameObject);
-            //}
-            //if (trailMatIndex < trails.Length -1)
-            //{				
-            //    trailMatIndex++;				
-            //}
-            //else
-            //{
-            //    trailMatIndex = 0;
-            //}
-            //Instantiate(trails[trailMatIndex], trailHolder.transform);
-        }
 	}
 }

@@ -15,7 +15,10 @@ namespace Terresquall.FruitSlicer {
 
         Rigidbody2D rb;
 
+        FruitNinjaGameManager fruitNinjaGameManager;
+
         void Start() {
+            fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();
             Destroy(gameObject, lifespan);
 
             float a = GetSpawnFacing();
@@ -44,6 +47,7 @@ namespace Terresquall.FruitSlicer {
         void OnSwipeExit2D(Touch t) {
             Vector2 sliceEnd = Camera.main.ScreenToWorldPoint(t.position);
             Instantiate(sliceEffectPrefab, Camera.main.ScreenToWorldPoint((Vector3)t.position + new Vector3(0,0,5)), Quaternion.identity);
+            fruitNinjaGameManager.Score++;
             Destroy(gameObject);
         }
 

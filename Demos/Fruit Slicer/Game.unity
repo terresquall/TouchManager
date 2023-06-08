@@ -171,7 +171,7 @@ MonoBehaviour:
   - {fileID: 662360939436711298, guid: 354f9c59623e6924db3e8f88e8b3f076, type: 3}
   - {fileID: 662360939436711298, guid: b175d2bccd8eb984d80e48f3cf3b4648, type: 3}
   - {fileID: 6896115186343531196, guid: 345cfdd1ab31920459a7d9018f634a79, type: 3}
-  trailMatIndex: 0
+  trailMatIndex: 4
   score: 0
   scoreText: {fileID: 1950523546}
 --- !u!20 &93239360
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}

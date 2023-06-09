@@ -316,6 +316,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 394386417, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485672696, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4007643528035933490, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -367,6 +375,10 @@ PrefabInstance:
     - target: {fileID: 4007643528035933517, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
       propertyPath: m_Name
       value: Fruit Ninja Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007643528581297906, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e69b65d4b17c7b143b65760670daa435, type: 3}

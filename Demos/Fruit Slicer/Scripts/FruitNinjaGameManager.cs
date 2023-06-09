@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace Terresquall.FruitSlicer {
     [RequireComponent(typeof(Camera))]
@@ -14,6 +15,10 @@ namespace Terresquall.FruitSlicer {
         }
         public Scene fnScene;
 
+        [Header("Only for Menu")]
+        [SerializeField] GameObject skinSelector;
+        [SerializeField] GameObject mainMenu;
+
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
         public Rect spawnArea;
@@ -21,14 +26,18 @@ namespace Terresquall.FruitSlicer {
         float currentSpawnCooldown;
         const float SPAWN_AREA_HEIGHT = 1f;
 
-        public GameObject[] trails;
-        public int trailMatIndex;
+        public GameObject[] skins;
+        public int skinIndex;
 
         //game stuff
         public int score;
 
         public TextMeshProUGUI scoreText;
 
+        void Start()
+        {
+            skinIndex = PlayerPrefs.GetInt("CurrentSkinIndex", 0);
+        }
         void Update() 
         {
             if(fnScene == Scene.Game)
@@ -99,6 +108,26 @@ namespace Terresquall.FruitSlicer {
                     scoreText.text = score.ToString();
                 }
             }
-        }       
+        }
+
+        //menu stuff
+        public void PlayGame()
+        {
+            SceneManager.LoadScene("Game");
+        }
+        public void BackToMain()
+        {
+            SceneManager.LoadScene("Menu");
+        }
+        public void MenuToggle()
+        {
+            skinSelector.SetActive(false);
+            mainMenu.SetActive(true);
+        }
+        public void SkinSelectToggle()
+        {
+            mainMenu.SetActive(false);
+            skinSelector.SetActive(true);           
+        }
     }
 }

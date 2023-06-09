@@ -75,7 +75,7 @@ namespace Terresquall {
 				if(currentGameMode == GameMode.FruitNinja)
 				{
                     _trailHolder = Instantiate(trailHolder, transform);
-                    GameObject _trailObject = Instantiate(fruitNinjaGameManager.trails[fruitNinjaGameManager.trailMatIndex]);
+                    GameObject _trailObject = Instantiate(fruitNinjaGameManager.skins[fruitNinjaGameManager.skinIndex]);
                     _trailObject.transform.SetParent(_trailHolder.transform);
                 }                
 				

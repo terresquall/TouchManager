@@ -1479,7 +1479,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4007643528317648132}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2449,6 +2449,9 @@ MonoBehaviour:
   fnScene: 0
   skinSelector: {fileID: 1946711195}
   mainMenu: {fileID: 394386417}
+  scoreHolder: {fileID: 0}
+  pauseScreen: {fileID: 0}
+  pauseIcon: {fileID: 0}
   spawnedPrefabs:
   - {fileID: 8759425888166923734, guid: 121923fb50a561d418aaaba9850f3fb2, type: 3}
   - {fileID: 6227700680845120463, guid: fd8ae4fca3cd77b4b9c50a56cf378d0f, type: 3}
@@ -2470,6 +2473,7 @@ MonoBehaviour:
   skinIndex: 0
   score: 0
   scoreText: {fileID: 4007643528845166057}
+  pauseScoreText: {fileID: 0}
 --- !u!1 &4007643528317648133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2501,8 +2505,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4007643528581297905}
   - {fileID: 1485672697}
+  - {fileID: 4007643528581297905}
   - {fileID: 1946711196}
   - {fileID: 394386418}
   m_Father: {fileID: 4007643528035933490}
@@ -2605,7 +2609,7 @@ RectTransform:
   - {fileID: 4007643528845166058}
   - {fileID: 4007643529142411296}
   m_Father: {fileID: 4007643528317648132}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

@@ -15,9 +15,12 @@ namespace Terresquall.FruitSlicer {
         }
         public Scene fnScene;
 
-        [Header("Only for Menu")]
+        [Header("Game Stuff")]
         [SerializeField] GameObject skinSelector;
         [SerializeField] GameObject mainMenu;
+        [SerializeField] GameObject scoreHolder;
+        [SerializeField] GameObject pauseScreen;
+        [SerializeField] GameObject pauseIcon;
 
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
@@ -31,16 +34,17 @@ namespace Terresquall.FruitSlicer {
 
         //game stuff
         public int score;
-
+        
         public TextMeshProUGUI scoreText;
+        [SerializeField] TextMeshProUGUI pauseScoreText;
 
         void Start()
         {
             skinIndex = PlayerPrefs.GetInt("CurrentSkinIndex", 0);
         }
-        void Update() 
+        private void FixedUpdate()
         {
-            if(fnScene == Scene.Game)
+            if (fnScene == Scene.Game)
             {
                 SpawnFruit();
             }
@@ -117,8 +121,25 @@ namespace Terresquall.FruitSlicer {
         }
         public void BackToMain()
         {
+            Time.timeScale = 1f;
             SceneManager.LoadScene("Menu");
         }
+        public void PauseGame()
+        {
+            scoreHolder.SetActive(false);
+            pauseIcon.SetActive(false);
+            pauseScreen.SetActive(true);
+            pauseScoreText.text = Score.ToString();
+            Time.timeScale = 0f;
+        }
+        public void ResumeGame()
+        {           
+            pauseScreen.SetActive(false);
+            scoreHolder.SetActive(true);
+            pauseIcon.SetActive(true);
+            Time.timeScale = 1f;
+        }
+
         public void MenuToggle()
         {
             skinSelector.SetActive(false);

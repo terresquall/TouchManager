@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.9022176, y: -1.4772309, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,10 +46,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 690845911822636920, guid: 19aebc2bc1b7b004fa3423852f667f90, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -146,11 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8e2ee4b15ada943ae697b3b1a8f13e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifespan: 2
   speed: 13
   defaultSpawnFacing: 0
   spawnRange: 25
-  sliceEffectPrefab: {fileID: 7394945643303234360, guid: 74b829e9fc5101042a9342a418595e6e,
-    type: 3}
+  sliceEffectPrefab: {fileID: 7394945643303234360, guid: 74b829e9fc5101042a9342a418595e6e, type: 3}
 --- !u!50 &8655215206689480542
 Rigidbody2D:
   serializedVersion: 4

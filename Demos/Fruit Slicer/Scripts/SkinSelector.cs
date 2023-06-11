@@ -9,15 +9,15 @@ namespace Terresquall.FruitSlicer
     {
         public int skinIndex;
 
-        FruitNinjaGameManager fruitNinjaGameManager;
+        TouchManager touchManager;
         // Start is called before the first frame update
         void Start()
         {
-            fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();
+            touchManager = FindObjectOfType<TouchManager>();
         }
         public void ChangeSkin()
         {
-            fruitNinjaGameManager.skinIndex = skinIndex;
+            touchManager.skinIndex = skinIndex;
             PlayerPrefs.SetInt("CurrentSkinIndex", skinIndex);
             PlayerPrefs.Save();
         }

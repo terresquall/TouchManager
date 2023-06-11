@@ -8,12 +8,12 @@ namespace Terresquall.FruitSlicer {
     [RequireComponent(typeof(Camera))]
     public class FruitNinjaGameManager : MonoBehaviour {
 
-        public enum Scene
+        public enum GameState
         {
             Menu,
             Game
         }
-        public Scene fnScene;
+        public GameState fnScene;
 
         [Header("Game Stuff")]
         [SerializeField] GameObject skinSelector;
@@ -21,6 +21,8 @@ namespace Terresquall.FruitSlicer {
         [SerializeField] GameObject scoreHolder;
         [SerializeField] GameObject pauseScreen;
         [SerializeField] GameObject pauseIcon;
+        [SerializeField] GameObject gameStuff;
+        [SerializeField] GameObject menuStuff;
 
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
@@ -29,8 +31,7 @@ namespace Terresquall.FruitSlicer {
         float currentSpawnCooldown;
         const float SPAWN_AREA_HEIGHT = 1f;
 
-        public GameObject[] skins;
-        public int skinIndex;
+        
 
         //game stuff
         public int score;
@@ -40,11 +41,11 @@ namespace Terresquall.FruitSlicer {
 
         void Start()
         {
-            skinIndex = PlayerPrefs.GetInt("CurrentSkinIndex", 0);
+            fnScene = GameState.Menu;
         }
         private void FixedUpdate()
         {
-            if (fnScene == Scene.Game)
+            if (fnScene == GameState.Game)
             {
                 SpawnFruit();
             }
@@ -117,12 +118,12 @@ namespace Terresquall.FruitSlicer {
         //menu stuff
         public void PlayGame()
         {
-            SceneManager.LoadScene("Game");
+            ChangeState(GameState.Game);
+            ResumeGame();
         }
         public void BackToMain()
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene("Menu");
+        {           
+            ChangeState(GameState.Menu);
         }
         public void PauseGame()
         {
@@ -149,6 +150,28 @@ namespace Terresquall.FruitSlicer {
         {
             mainMenu.SetActive(false);
             skinSelector.SetActive(true);           
+        }
+        void ChangeState(GameState _gameState)
+        {
+            switch (_gameState)
+            {
+                case GameState.Menu:
+                    Time.timeScale = 1f;
+                    GameObject[] _fruits = GameObject.FindGameObjectsWithTag("Fruit");
+                    for (int i = 0; i < _fruits.Length; i++)
+                    {
+                        Destroy(_fruits[i]);
+                    }
+                    gameStuff.SetActive(false);
+                    menuStuff.SetActive(true);
+                    break;
+
+                case GameState.Game:
+                    Time.timeScale = 1f;                
+                    menuStuff.SetActive(false);
+                    gameStuff.SetActive(true);
+                    break;
+            }
         }
     }
 }

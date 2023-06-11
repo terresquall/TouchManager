@@ -8,15 +8,6 @@ namespace Terresquall {
 	[RequireComponent(typeof(Camera))]
 	public class TouchManager : MonoBehaviour {
 
-		public enum GameMode
-		{
-			FruitNinja,
-			Other
-		}
-		[Header("Game selector")]
-		public GameMode currentGameMode;
-		[Space(5)]
-
         List<int> touchIds = new List<int>();
 		public new Camera camera;
 		public LayerMask affectedLayers = ~0;
@@ -35,16 +26,15 @@ namespace Terresquall {
 		[SerializeField] GameObject trailHolder;
 		GameObject _trailHolder;
 		FruitNinjaGameManager fruitNinjaGameManager;
-		
+
+        public GameObject[] skins;
+        public int skinIndex;
+
 
         // Start is called before the first frame update
-        private void Awake()
+        private void Start()
         {
-			if(currentGameMode == GameMode.FruitNinja)
-			{
-                fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();
-            }
-			
+            skinIndex = PlayerPrefs.GetInt("CurrentSkinIndex", 0);  //get the saved skin
         }
 
         void Reset() 
@@ -72,13 +62,11 @@ namespace Terresquall {
             }
             else if (Input.GetMouseButtonDown(0)) //mouse input
             {
-				if(currentGameMode == GameMode.FruitNinja)
-				{
-                    _trailHolder = Instantiate(trailHolder, transform);
-                    GameObject _trailObject = Instantiate(fruitNinjaGameManager.skins[fruitNinjaGameManager.skinIndex]);
-                    _trailObject.transform.SetParent(_trailHolder.transform);
-                }                
-				
+				//for trails
+                _trailHolder = Instantiate(trailHolder, transform);
+                GameObject _trailObject = Instantiate(skins[skinIndex]);
+                _trailObject.transform.SetParent(_trailHolder.transform);
+
                 Touch mouseTouch = new Touch();
                 mouseTouch.fingerId = -1;
                 mouseTouch.position = Input.mousePosition;

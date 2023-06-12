@@ -38,10 +38,18 @@ namespace Terresquall.FruitSlicer {
         
         public TextMeshProUGUI scoreText;
         [SerializeField] TextMeshProUGUI pauseScoreText;
+        [SerializeField] TextMeshProUGUI highScoreText;
 
         void Start()
         {
             fnScene = GameState.Menu;
+        }
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                PlayerPrefs.DeleteKey("HighScore");
+            }
         }
         private void FixedUpdate()
         {
@@ -115,14 +123,25 @@ namespace Terresquall.FruitSlicer {
             }
         }
 
-        //menu stuff
+        //functions
         public void PlayGame()
         {
             ChangeState(GameState.Game);
+            Score = 0;
             ResumeGame();
+            highScoreText.text = "HighScore: " + PlayerPrefs.GetInt("HighScore", 0).ToString();
+        }
+        void SaveHighScore()
+        {
+            if(Score > PlayerPrefs.GetInt("HighScore", 0))
+            {
+                PlayerPrefs.SetInt("HighScore", Score);
+                PlayerPrefs.Save();
+            }
         }
         public void BackToMain()
-        {           
+        {
+            SaveHighScore();
             ChangeState(GameState.Menu);
         }
         public void PauseGame()
@@ -130,7 +149,7 @@ namespace Terresquall.FruitSlicer {
             scoreHolder.SetActive(false);
             pauseIcon.SetActive(false);
             pauseScreen.SetActive(true);
-            pauseScoreText.text = Score.ToString();
+            pauseScoreText.text = Score.ToString();           
             Time.timeScale = 0f;
         }
         public void ResumeGame()

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 namespace Terresquall.FruitSlicer {
-    [RequireComponent(typeof(Camera))]
+    //[RequireComponent(typeof(Camera))]
     public class FruitNinjaGameManager : MonoBehaviour {
 
         public enum GameState
@@ -23,6 +24,9 @@ namespace Terresquall.FruitSlicer {
         [SerializeField] GameObject pauseIcon;
         [SerializeField] GameObject gameStuff;
         [SerializeField] GameObject menuStuff;
+        [SerializeField] GameObject loseScreen;
+        [SerializeField] GameObject gameOverText;
+        bool gameOver = false;
 
         public GameObject[] spawnedPrefabs;
         public float spawnInterval = 1.5f, intervalVariance = 1f;
@@ -35,10 +39,14 @@ namespace Terresquall.FruitSlicer {
 
         //game stuff
         public int score;
+        public int penalty;
+        [SerializeField] GameObject[] crossFills;
         
         public TextMeshProUGUI scoreText;
         [SerializeField] TextMeshProUGUI pauseScoreText;
+        [SerializeField] TextMeshProUGUI endScoreText;
         [SerializeField] TextMeshProUGUI highScoreText;
+        
 
         void Start()
         {
@@ -53,7 +61,7 @@ namespace Terresquall.FruitSlicer {
         }
         private void FixedUpdate()
         {
-            if (fnScene == GameState.Game)
+            if (fnScene == GameState.Game && !gameOver)
             {
                 SpawnFruit();
             }
@@ -104,11 +112,11 @@ namespace Terresquall.FruitSlicer {
             }
         }
 
-        void Reset() {
-            Camera camera = GetComponent<Camera>();
-            spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
-            spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
-        }
+        //void Reset() {
+            //Camera camera = GetComponent<Camera>();
+        //    spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
+        //    spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
+        //}
 
         public int Score
         {
@@ -122,12 +130,56 @@ namespace Terresquall.FruitSlicer {
                 }
             }
         }
+        public int Penalty
+        {
+            get { return penalty; }
+            set
+            {
+                if (penalty != value)
+                {
+                    penalty = value;
+                    UpdateCrosses();
+                }
+            }
+        }
+        public void UpdateCrosses()
+        {
+            if(Penalty == 0)
+            {
+                crossFills[0].SetActive(false);
+                crossFills[1].SetActive(false);
+                crossFills[2].SetActive(false);
+            }
+            else if(Penalty == 1)
+            {
+                crossFills[0].SetActive(true);
+            }
+            else if(Penalty == 2)
+            {
+                crossFills[0].SetActive(true);
+                crossFills[1].SetActive(true);
+            }
+            else if (Penalty == 3)
+            {
+                crossFills[0].SetActive(true);
+                crossFills[1].SetActive(true);
+                crossFills[2].SetActive(true);
+                StartCoroutine(LoseGame());
+            }
+        }
 
         //functions
         public void PlayGame()
         {
+            
+            gameOver = false;
             ChangeState(GameState.Game);
+            loseScreen.SetActive(false);
+            scoreHolder.SetActive(true);
+            pauseIcon.SetActive(true);
             Score = 0;
+            Penalty = 0;
+            UpdateCrosses();
             ResumeGame();
             highScoreText.text = "HighScore: " + PlayerPrefs.GetInt("HighScore", 0).ToString();
         }
@@ -142,6 +194,7 @@ namespace Terresquall.FruitSlicer {
         public void BackToMain()
         {
             SaveHighScore();
+            gameOver = false;
             ChangeState(GameState.Menu);
         }
         public void PauseGame()
@@ -158,6 +211,43 @@ namespace Terresquall.FruitSlicer {
             scoreHolder.SetActive(true);
             pauseIcon.SetActive(true);
             Time.timeScale = 1f;
+        }
+
+        float timeElapsed = 0;
+        IEnumerator LoseGame()
+        {
+            gameOver = true;
+            scoreHolder.SetActive(false);
+            pauseIcon.SetActive(false);
+            pauseScreen.SetActive(false);
+
+            GameObject[] _fruits = GameObject.FindGameObjectsWithTag("Fruit");
+            for (int i = 0; i < _fruits.Length; i++)
+            {
+                Destroy(_fruits[i]);
+            }
+
+            gameOverText.SetActive(true);
+
+            yield return new WaitForSeconds(1.4f);
+
+            gameOverText.SetActive(false);
+            loseScreen.SetActive(true);
+
+            while (timeElapsed < 1f)
+            {
+                timeElapsed += Time.deltaTime;
+
+                float t = Mathf.Clamp01(timeElapsed / 1f);
+                float increasedValue = Mathf.Lerp(0, Score, t);
+
+                int roundedValue = Mathf.RoundToInt(increasedValue);
+                endScoreText.text = roundedValue.ToString();
+
+                yield return null;
+            }
+
+            endScoreText.text = Score.ToString();
         }
 
         public void MenuToggle()
@@ -191,6 +281,7 @@ namespace Terresquall.FruitSlicer {
                     gameStuff.SetActive(true);
                     break;
             }
+            fnScene = _gameState;
         }
     }
 }

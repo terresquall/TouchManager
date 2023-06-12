@@ -14,20 +14,29 @@ namespace Terresquall.FruitSlicer {
         public GameObject sliceEffectPrefab;
 
         Rigidbody2D rb;
+        Camera camera;
+        [SerializeField] bool onScreen = false;
 
         FruitNinjaGameManager fruitNinjaGameManager;
 
-        void Start() {
-            fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();
-            Destroy(gameObject, lifespan);
+        SpriteRenderer sr;
 
+        void Start() {
+            fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();            
             float a = GetSpawnFacing();
             rb = GetComponent<Rigidbody2D>();
+            sr = GetComponent<SpriteRenderer>();
+            camera = FindObjectOfType<Camera>();
             rb.velocity = Quaternion.Euler(0,0,a) * transform.up * speed;
             rb.angularVelocity = Random.Range(0,180);
 
             transform.rotation = Quaternion.Euler(0,0,Random.Range(0,360));
         }
+        void Update()
+        {
+            CheckIfOffscreen();
+        }
+
 
         float GetSpawnFacing() {
             return defaultSpawnFacing + Random.Range(-spawnRange, spawnRange);
@@ -71,5 +80,26 @@ namespace Terresquall.FruitSlicer {
             Gizmos.DrawLine(pos, pos + dirLeft * 3);
             Gizmos.DrawLine(pos, pos + dirRight * 3);
         }
+        void CheckIfOffscreen()
+        {
+            Vector3 viewportPosition = camera.WorldToViewportPoint(transform.position);
+            if (onScreen && (viewportPosition.x < 0 || viewportPosition.x > 1 || viewportPosition.y < 0 || viewportPosition.y > 1))
+            {
+                fruitNinjaGameManager.Penalty++;
+                Destroy(gameObject);
+                
+            }
+            else
+            {
+                StartCoroutine(DelayOnScreen());
+                
+            }
+        }
+        IEnumerator DelayOnScreen()
+        {
+            yield return new WaitForSeconds(0.1f);
+            onScreen = true;
+        }
+
     }
 }

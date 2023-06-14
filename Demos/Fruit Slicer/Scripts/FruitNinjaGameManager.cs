@@ -15,6 +15,8 @@ namespace Terresquall.FruitSlicer {
             Game
         }
         public GameState fnScene;
+        AudioSource audio;
+        [SerializeField] AudioClip[] audioClips;
 
         [Header("Game Stuff")]
         [SerializeField] GameObject skinSelector;
@@ -51,6 +53,10 @@ namespace Terresquall.FruitSlicer {
 
         void Start()
         {
+            audio = GetComponent<AudioSource>();
+            audio.clip = audioClips[0];
+            audio.loop = true;
+            audio.Play();
             fnScene = GameState.Menu;
         }
         private void Update()
@@ -187,7 +193,7 @@ namespace Terresquall.FruitSlicer {
                 crossFills[0].SetActive(true);
                 crossFills[1].SetActive(true);
             }
-            else if (Penalty == 3)
+            else if (Penalty >= 3)
             {
                 crossFills[0].SetActive(true);
                 crossFills[1].SetActive(true);
@@ -195,21 +201,36 @@ namespace Terresquall.FruitSlicer {
                 StartCoroutine(LoseGame());
             }
         }
+        public void StartGame()
+        {
+            ChangeState(GameState.Menu);
+            StartCoroutine(PlayGame());
+        }
 
         //functions
-        public void PlayGame()
+        public IEnumerator PlayGame()
         {            
             gameOver = false;
-            ChangeState(GameState.Game);
-            spawnFruitVariance = 10f;
+            menuStuff.SetActive(false);
             loseScreen.SetActive(false);
             scoreHolder.SetActive(true);
             pauseIcon.SetActive(true);
             Score = 0;
             Penalty = 0;
             UpdateCrosses();
-            ResumeGame();
             highScoreText.text = "HighScore: " + PlayerPrefs.GetInt("HighScore", 0).ToString();
+
+            audio.Stop();
+            audio.clip = audioClips[2];
+            audio.loop = false;
+            audio.Play();
+            
+            yield return new WaitForSeconds(3f);
+            ChangeState(GameState.Game);
+
+            spawnFruitVariance = 10f;
+            
+            ResumeGame();          
         }
         void SaveHighScore()
         {
@@ -245,8 +266,11 @@ namespace Terresquall.FruitSlicer {
         public IEnumerator LoseGame()
         {
             gameOver = true;
-
-            yield return new WaitForSeconds(0.7f);
+            audio.Stop();
+            audio.clip = audioClips[3];
+            audio.loop = false;
+            audio.Play();
+            yield return new WaitForSeconds(1.1f);
 
             scoreHolder.SetActive(false);
             pauseIcon.SetActive(false);
@@ -264,7 +288,7 @@ namespace Terresquall.FruitSlicer {
 
             gameOverText.SetActive(false);
             loseScreen.SetActive(true);
-            
+            timeElapsed = 0;
             while (timeElapsed < 1f)
             {
                 timeElapsed += Time.deltaTime;
@@ -297,6 +321,12 @@ namespace Terresquall.FruitSlicer {
             {
                 case GameState.Menu:
                     Time.timeScale = 1f;
+
+                    audio.Stop();
+                    audio.clip = audioClips[0];
+                    audio.loop = true;
+                    audio.Play();
+
                     GameObject[] _fruits = GameObject.FindGameObjectsWithTag("Fruit");
                     for (int i = 0; i < _fruits.Length; i++)
                     {
@@ -307,7 +337,13 @@ namespace Terresquall.FruitSlicer {
                     break;
 
                 case GameState.Game:
-                    Time.timeScale = 1f;                
+                    Time.timeScale = 1f;
+
+                    audio.Stop();
+                    audio.clip = audioClips[1];
+                    audio.loop = true;
+                    audio.Play();
+
                     menuStuff.SetActive(false);
                     gameStuff.SetActive(true);
                     break;

@@ -4887,27 +4887,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2
+      value: 0.8000001
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2
+      value: 0.8000001
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000000037787846
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5502573e-15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.000000021816817
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4939,7 +4939,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1955391314647296278, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5056,7 +5056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b90edbfbb04bc374d8bd6885562b6d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 1
+  time: 4
 --- !u!4 &974040001480033333 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}

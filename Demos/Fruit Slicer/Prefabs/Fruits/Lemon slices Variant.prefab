@@ -4886,16 +4886,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000000021681956
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000005960239
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000009789581
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4924,6 +4936,10 @@ PrefabInstance:
     - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1955391314647296278, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5040,7 +5056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b90edbfbb04bc374d8bd6885562b6d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 1
+  time: 4
 --- !u!4 &974040001480033333 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1753491070085634705, guid: fe67ace7dd49476458c027e92dfa7c69, type: 3}

@@ -218,9 +218,12 @@ namespace Terresquall.FruitSlicer {
         }
 
         float timeElapsed = 0;
-        IEnumerator LoseGame()
+        public IEnumerator LoseGame()
         {
             gameOver = true;
+
+            yield return new WaitForSeconds(0.7f);
+
             scoreHolder.SetActive(false);
             pauseIcon.SetActive(false);
             pauseScreen.SetActive(false);
@@ -232,12 +235,12 @@ namespace Terresquall.FruitSlicer {
             }
 
             gameOverText.SetActive(true);
-
+            
             yield return new WaitForSeconds(1.4f);
 
             gameOverText.SetActive(false);
             loseScreen.SetActive(true);
-
+            
             while (timeElapsed < 1f)
             {
                 timeElapsed += Time.deltaTime;

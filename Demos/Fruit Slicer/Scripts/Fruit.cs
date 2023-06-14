@@ -7,7 +7,6 @@ namespace Terresquall.FruitSlicer {
     public class Fruit : MonoBehaviour {
         
         public float lifespan = 2f;
-        public float speed = 5f;
         public float defaultSpawnFacing;
         [Range(0,180)] public float spawnRange = 45f;
         Vector2 sliceStartPosition;
@@ -29,8 +28,8 @@ namespace Terresquall.FruitSlicer {
             rb = GetComponent<Rigidbody>();
             sr = GetComponent<SpriteRenderer>();
             camera = FindObjectOfType<Camera>();
-            rb.velocity = Quaternion.Euler(0,0,a) * transform.up * speed;
-            rb.angularVelocity = new Vector3(0, 0, Random.Range(0, 180));
+            rb.velocity = Quaternion.Euler(0,0,a) * transform.up * Random.Range(10, 15);
+            rb.angularVelocity = new Vector3(0, 0, Random.Range(0, 10));
 
             transform.rotation = Quaternion.Euler(0,0,Random.Range(0,360));
         }
@@ -47,6 +46,13 @@ namespace Terresquall.FruitSlicer {
         void OnSwipeEnter(Touch t) {
             if(sliceStartPosition.sqrMagnitude > 0) {
                 sliceStartPosition = Camera.main.ScreenToWorldPoint(t.position);
+
+                // Instantiate the fruit slices
+                GameObject fruitSliceObj = Instantiate(fruitSlices, transform);
+                Rigidbody[] sliceRBs = fruitSliceObj.GetComponentsInChildren<Rigidbody>();
+
+                fruitNinjaGameManager.Score++;
+                Destroy(gameObject);
             }            
         }
 
@@ -102,8 +108,7 @@ namespace Terresquall.FruitSlicer {
             }
             else
             {
-                StartCoroutine(DelayOnScreen());
-                
+                StartCoroutine(DelayOnScreen());                
             }
         }
         IEnumerator DelayOnScreen()

@@ -21,15 +21,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025774689287590606, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7025774689287590606, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2
+      value: 0.8000001
       objectReference: {fileID: 0}
     - target: {fileID: 7025774689287590606, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2
+      value: 0.8000001
       objectReference: {fileID: 0}
     - target: {fileID: 7025774689287590606, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -73,7 +73,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025774689287590606, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7695315270425544820, guid: 70fb818b185147f478e535786a09952e, type: 3}
       propertyPath: m_Name
@@ -121,9 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifespan: 2
-  speed: 5
   defaultSpawnFacing: 0
   spawnRange: 45
-  sliceEffectPrefab: {fileID: 7394945643303234360, guid: 74b829e9fc5101042a9342a418595e6e, type: 3}
   fruitSlices: {fileID: 490800639946612367, guid: 686d74f9d72096c4c8f25a66629af893, type: 3}
   onScreen: 0

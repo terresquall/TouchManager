@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5633645048647821552}
   - component: {fileID: 6769310442099520408}
   - component: {fileID: 7523526604895274816}
-  - component: {fileID: 2342932659037667500}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2342932659037667500
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076545998792881118}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2711538804103598110
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +261,7 @@ GameObject:
   - component: {fileID: 4782454623253631645}
   - component: {fileID: 7677641176804894396}
   - component: {fileID: 8837930474876815064}
+  - component: {fileID: 2175093231041177953}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -290,9 +277,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4737229887953368324}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -572.44556, y: 1, z: -1804.749}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5633645048647821552}
   - {fileID: 3734478173779685802}
@@ -312,6 +299,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac19ab6dd8df724c84cd3e592ca5818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifespan: 2
+  defaultSpawnFacing: 0
+  spawnRange: 45
+  explosion: {fileID: 8092792770982758853, guid: 89f2b3486bf726847b16f15652c0673f, type: 3}
+  onScreen: 0
 --- !u!54 &8837930474876815064
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -320,14 +312,27 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4737229887953368324}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &2175093231041177953
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737229887953368324}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7443644929469032613
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +449,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.01
+      scalar: 0.02
       minScalar: 5
       maxCurve:
         serializedVersion: 2

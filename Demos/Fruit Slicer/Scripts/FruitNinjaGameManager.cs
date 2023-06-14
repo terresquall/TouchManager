@@ -68,27 +68,38 @@ namespace Terresquall.FruitSlicer {
         }
         void SpawnFruit()
         {
+
             if (currentSpawnCooldown > 0)
                 currentSpawnCooldown -= Time.deltaTime;
             else
             {
                 currentSpawnCooldown += spawnInterval + Random.Range(0, intervalVariance);
-                Vector2 spawnPos = GetRandomSpawnPosition();
-                Instantiate(
-                    spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)],
-                    (Vector2)transform.position + spawnPos,
-                    Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
+                Vector3 spawnPos = GetRandomSpawnPosition();
+
+                GameObject spawnedFruit = Instantiate(spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)], 
+                    spawnPos, Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
                 );
+
+                // Add a random force to the spawned fruit
+                Rigidbody fruitRB = spawnedFruit.GetComponent<Rigidbody>();
+                float randomForce = Random.Range(30, 30);
+                fruitRB.AddForce(Vector3.up * randomForce, ForceMode.Impulse);
             }
         }
 
-        // Generates a random spawn position centred around the origin.
-        public Vector2 GetRandomSpawnPosition() {
-            float hw = spawnArea.size.x * 0.5f, hh = spawnArea.size.y * 0.5f;
-            return spawnArea.position + new Vector2(
+        public Vector3 GetRandomSpawnPosition()
+        {
+            float hw = spawnArea.size.x * 0.5f;
+            float hh = spawnArea.size.y * 0.5f;
+            Vector3 center = spawnArea.position;
+
+            Vector3 spawnPos = new Vector3(
                 Random.Range(-hw, hw),
+                center.y, // Keep the Y position constant
                 Random.Range(-hh, hh)
             );
+
+            return center + spawnPos;
         }
 
         void OnDrawGizmosSelected() {
@@ -111,13 +122,6 @@ namespace Terresquall.FruitSlicer {
                 Gizmos.DrawLine(d, a);
             }
         }
-
-        //void Reset() {
-            //Camera camera = GetComponent<Camera>();
-        //    spawnArea.y = -camera.orthographicSize - SPAWN_AREA_HEIGHT * 0.5f;
-        //    spawnArea.size = new Vector2(camera.orthographicSize * 2f * camera.aspect, SPAWN_AREA_HEIGHT);
-        //}
-
         public int Score
         {
             get { return score; }

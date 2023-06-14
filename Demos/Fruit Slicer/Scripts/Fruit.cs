@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Terresquall.FruitSlicer {
     public class Fruit : MonoBehaviour {
@@ -11,9 +12,10 @@ namespace Terresquall.FruitSlicer {
         [Range(0,180)] public float spawnRange = 45f;
         Vector2 sliceStartPosition;
 
-        public GameObject sliceEffectPrefab;
+        
+        [SerializeField] GameObject fruitSlices;
 
-        Rigidbody2D rb;
+        Rigidbody rb;
         Camera camera;
         [SerializeField] bool onScreen = false;
 
@@ -24,11 +26,11 @@ namespace Terresquall.FruitSlicer {
         void Start() {
             fruitNinjaGameManager = FindObjectOfType<FruitNinjaGameManager>();            
             float a = GetSpawnFacing();
-            rb = GetComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody>();
             sr = GetComponent<SpriteRenderer>();
             camera = FindObjectOfType<Camera>();
             rb.velocity = Quaternion.Euler(0,0,a) * transform.up * speed;
-            rb.angularVelocity = Random.Range(0,180);
+            rb.angularVelocity = new Vector3(0, 0, Random.Range(0, 180));
 
             transform.rotation = Quaternion.Euler(0,0,Random.Range(0,360));
         }
@@ -42,20 +44,29 @@ namespace Terresquall.FruitSlicer {
             return defaultSpawnFacing + Random.Range(-spawnRange, spawnRange);
         }
 
-        void OnSwipeEnter2D(Touch t) {
+        void OnSwipeEnter(Touch t) {
             if(sliceStartPosition.sqrMagnitude > 0) {
                 sliceStartPosition = Camera.main.ScreenToWorldPoint(t.position);
-            }
-            Instantiate(sliceEffectPrefab, Camera.main.ScreenToWorldPoint((Vector3)t.position + new Vector3(0,0,5)), Quaternion.identity);
+            }            
         }
 
-        void OnSwipeStay2D(Touch t) {
-            Instantiate(sliceEffectPrefab, Camera.main.ScreenToWorldPoint((Vector3)t.position + new Vector3(0,0,5)), Quaternion.identity);
-        }
-
-        void OnSwipeExit2D(Touch t) {
+        void OnSwipeExit(Touch t) {
             Vector2 sliceEnd = Camera.main.ScreenToWorldPoint(t.position);
-            Instantiate(sliceEffectPrefab, Camera.main.ScreenToWorldPoint((Vector3)t.position + new Vector3(0,0,5)), Quaternion.identity);
+
+            // Calculate the direction and rotation of the swipe
+            Vector2 sliceDirection = (sliceEnd - sliceStartPosition).normalized;
+            Quaternion rotation = Quaternion.LookRotation(sliceDirection);
+
+            // Instantiate the fruit slices
+            GameObject fruitSliceObj = Instantiate(fruitSlices, transform.position, rotation);
+            Rigidbody[] sliceRBs = fruitSliceObj.GetComponentsInChildren<Rigidbody>();
+
+            // Apply an impulse to each fruit slice
+            foreach (Rigidbody sliceRB in sliceRBs)
+            {
+                sliceRB.AddForce(sliceDirection * 5f, ForceMode.Impulse);
+            }
+
             fruitNinjaGameManager.Score++;
             Destroy(gameObject);
         }

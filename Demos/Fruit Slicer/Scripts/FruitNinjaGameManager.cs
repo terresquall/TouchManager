@@ -29,6 +29,7 @@ namespace Terresquall.FruitSlicer {
         bool gameOver = false;
 
         public GameObject[] spawnedPrefabs;
+
         public float spawnInterval = 1.5f, intervalVariance = 1f;
         public Rect spawnArea;
 

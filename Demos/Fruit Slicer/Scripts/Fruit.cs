@@ -103,7 +103,7 @@ namespace Terresquall.FruitSlicer {
             if (onScreen && (viewportPosition.x < 0 || viewportPosition.x > 1 || viewportPosition.y < 0 || viewportPosition.y > 1))
             {
                 fruitNinjaGameManager.Penalty++;
-                Destroy(gameObject);
+                Destroy(gameObject, 0.2f);
                 
             }
             else

@@ -97,14 +97,19 @@ namespace Terresquall.FruitSlicer {
             Gizmos.DrawLine(pos, pos + dirLeft * 3);
             Gizmos.DrawLine(pos, pos + dirRight * 3);
         }
+        bool penalised = false;
         void CheckIfOffscreen()
         {
             Vector3 viewportPosition = camera.WorldToViewportPoint(transform.position);
             if (onScreen && (viewportPosition.x < 0 || viewportPosition.x > 1 || viewportPosition.y < 0 || viewportPosition.y > 1))
             {
-                fruitNinjaGameManager.Penalty++;
-                Destroy(gameObject, 0.2f);
+                if(!penalised)
+                {
+                    fruitNinjaGameManager.Penalty++;
+                    penalised = true;
+                }
                 
+                Destroy(gameObject, 0.2f);                
             }
             else
             {

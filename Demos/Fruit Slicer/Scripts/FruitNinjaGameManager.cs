@@ -33,7 +33,7 @@ namespace Terresquall.FruitSlicer {
         public float spawnInterval = 1.5f, intervalVariance = 1f;
         public Rect spawnArea;
 
-        float currentSpawnCooldown;
+        public float currentSpawnCooldown;
         const float SPAWN_AREA_HEIGHT = 1f;
 
         
@@ -60,11 +60,13 @@ namespace Terresquall.FruitSlicer {
                 PlayerPrefs.DeleteKey("HighScore");
             }
         }
+        public float spawnFruitVariance = 10;
         private void FixedUpdate()
         {
             if (fnScene == GameState.Game && !gameOver)
             {
                 SpawnFruit();
+                spawnFruitVariance -= Time.deltaTime;
             }
         }
         void SpawnFruit()
@@ -74,17 +76,38 @@ namespace Terresquall.FruitSlicer {
                 currentSpawnCooldown -= Time.deltaTime;
             else
             {
-                currentSpawnCooldown += spawnInterval + Random.Range(0, intervalVariance);
-                Vector3 spawnPos = GetRandomSpawnPosition();
+                if (spawnFruitVariance > 0)
+                {
+                    currentSpawnCooldown += spawnInterval + Random.Range(0, intervalVariance);
+                    Vector3 spawnPos = GetRandomSpawnPosition();
 
-                GameObject spawnedFruit = Instantiate(spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)], 
-                    spawnPos, Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
-                );
+                    GameObject spawnedFruit = Instantiate(spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length - 2)],
+                        spawnPos, Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
+                    );
 
-                // Add a random force to the spawned fruit
-                Rigidbody fruitRB = spawnedFruit.GetComponent<Rigidbody>();
-                float randomForce = Random.Range(30, 30);
-                fruitRB.AddForce(Vector3.up * randomForce, ForceMode.Impulse);
+                    // Add a random force to the spawned fruit
+                    Rigidbody fruitRB = spawnedFruit.GetComponent<Rigidbody>();
+                    fruitRB.AddForce(Vector3.up * 30, ForceMode.Impulse);
+                }
+                else
+                {
+                    for (int i = 0; i < Random.Range(5, 8); i++)
+                    {
+                        Vector3 spawnPos = GetRandomSpawnPosition();
+
+                        GameObject spawnedFruit = Instantiate(spawnedPrefabs[Random.Range(0, spawnedPrefabs.Length)],
+                            spawnPos, Quaternion.Euler(0, 0, 45f * spawnPos.x / (spawnArea.size.x / 2f))
+                        );
+
+                        // Add a random force to the spawned fruit
+                        Rigidbody fruitRB = spawnedFruit.GetComponent<Rigidbody>();
+                        fruitRB.AddForce(Vector3.up * 25, ForceMode.Impulse);
+                    }
+
+                    spawnFruitVariance = Random.Range(8, 12);
+
+                }
+
             }
         }
 
@@ -175,10 +198,10 @@ namespace Terresquall.FruitSlicer {
 
         //functions
         public void PlayGame()
-        {
-            
+        {            
             gameOver = false;
             ChangeState(GameState.Game);
+            spawnFruitVariance = 10f;
             loseScreen.SetActive(false);
             scoreHolder.SetActive(true);
             pauseIcon.SetActive(true);

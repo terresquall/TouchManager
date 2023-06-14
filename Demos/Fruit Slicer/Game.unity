@@ -504,6 +504,10 @@ PrefabInstance:
       value: 17.85
       objectReference: {fileID: 0}
     - target: {fileID: 4007643528035933516, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: spawnedPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007643528035933516, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
       propertyPath: spawnedPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 4083291050884835426, guid: 4f9dd967d74af5c48b38ec94e5e459b7, type: 3}
@@ -515,6 +519,10 @@ PrefabInstance:
       propertyPath: spawnedPrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 4083291050884835426, guid: a0ab151c07f6520468a0c52d998d6612, type: 3}
+    - target: {fileID: 4007643528035933516, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: spawnedPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 4737229887953368324, guid: 94ce03ca4462cb347a1016a6b1cbeaa2, type: 3}
     - target: {fileID: 4007643528035933517, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
       propertyPath: m_Name
       value: Fruit Ninja Game

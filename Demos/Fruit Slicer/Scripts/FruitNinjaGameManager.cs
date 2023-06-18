@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 namespace Terresquall.FruitSlicer {
     //[RequireComponent(typeof(Camera))]
@@ -38,28 +37,36 @@ namespace Terresquall.FruitSlicer {
         public float currentSpawnCooldown;
         const float SPAWN_AREA_HEIGHT = 1f;
 
-        
-
         //game stuff
         public int score;
         public int penalty;
         [SerializeField] GameObject[] crossFills;
         
+        [Header("UI")]
         public TextMeshProUGUI scoreText;
         [SerializeField] TextMeshProUGUI pauseScoreText;
         [SerializeField] TextMeshProUGUI endScoreText;
         [SerializeField] TextMeshProUGUI highScoreText;
-        
+
+        public GameObject[] trailSkinPrefabs;
+        int currentSkinIndex;
 
         void Start()
         {
+            // Set the skin to the last saved one.
+            SetTrailSkin(PlayerPrefs.GetInt("CurrentSkinIndex", 0));
+
+            // Start the audio clip.
             audio = GetComponent<AudioSource>();
             audio.clip = audioClips[0];
             audio.loop = true;
             audio.Play();
             fnScene = GameState.Menu;
         }
-        private void Update()
+        public void SetTrailSkin(int index) {
+            TouchManager.SetTrail(trailSkinPrefabs[currentSkinIndex = index]);
+        }
+        void Update()
         {
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {

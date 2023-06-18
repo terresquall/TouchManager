@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Terresquall.FruitSlicer;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Terresquall {
 	[RequireComponent(typeof(Camera))]
 	public class TouchManager : MonoBehaviour {
+
+		const string VERSION = "0.2.0";
+		const string DATE = "18 June 2023";
 
         List<int> touchIds = new List<int>();
 		public new Camera camera;
@@ -15,41 +15,60 @@ namespace Terresquall {
 		public enum DetectionMode { both, physics2D, physics }
 		public DetectionMode detectionMode;
 
+		[SerializeField] GameObject trailPrefab; // Attach a trail prefab here and you will get trails when you swipe.
+		GameObject trail; // The trail we are using currently.
+
 		List<GameObject> swiped = new List<GameObject>(),
 						 swiped2D = new List<GameObject>();
 
-		const string VERSION = "0.1.0";
-		const string DATE = "1 May 2023";
-
 		bool isSwiping = false;
 		Vector2 startPoint, currentPoint;
-		[SerializeField] GameObject trailHolder;
-		GameObject _trailHolder;
-		FruitNinjaGameManager fruitNinjaGameManager;
 
-        public GameObject[] skins;
-        public int skinIndex;
+		static List<TouchManager> instances = new List<TouchManager>();
 
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-            skinIndex = PlayerPrefs.GetInt("CurrentSkinIndex", 0);  //get the saved skin
+        void Awake() {
+			// Track all instances of Touch Manager.
+            instances.Add(this);
         }
 
-        void Reset() 
-		{
+        // Start is called before the first frame update
+        void Start() {
+			// Check the assigned trail prefab, and instantiate it if it passes the checks.
+			if(trailPrefab) {
+				GameObject t = Instantiate(trailPrefab, camera.transform);
+			}
+        }
+
+		// Delete the current trail and replace it with a new one.
+		// This is static because you should only have one TouchManager.
+		public static void SetTrail(GameObject prefab, int index = 0) {
+			// If trying to retrieve an invalid index, print an error.
+			if(index >= instances.Count) {
+				Debug.LogError(string.Format("Touch Manager of index {0} does not exist.", index));
+				return;
+			}
+
+			instances[index].SetTrail(prefab);
+        }
+
+		// Set trail destroys the existing trail and adds a new trail.
+		public void SetTrail(GameObject prefab) {
+			if(trail) Destroy(trail);
+			trailPrefab = prefab;
+			trail = Instantiate(prefab, camera.transform);
+        }
+
+        void Reset() {
 			camera = GetComponentInChildren<Camera>();
 		}
 
 		// Update is called once per frame
-		void Update() 
-		{
+		void Update() {
 			InputHandler();
         }
-			
-		void InputHandler() // to handle both the touch and the mouse input
-		{
+		
+		// to handle both the touch and the mouse input
+		void InputHandler() {
 			Touch t;
             //touch input
 			if(Input.touchCount > 0)
@@ -62,11 +81,6 @@ namespace Terresquall {
             }
             else if (Input.GetMouseButtonDown(0)) //mouse input
             {
-				//for trails
-                _trailHolder = Instantiate(trailHolder, transform);
-                GameObject _trailObject = Instantiate(skins[skinIndex]);
-                _trailObject.transform.SetParent(_trailHolder.transform);
-
                 Touch mouseTouch = new Touch();
                 mouseTouch.fingerId = -1;
                 mouseTouch.position = Input.mousePosition;
@@ -151,8 +165,8 @@ namespace Terresquall {
                         Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
                         Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
 
-                        _trailHolder.transform.position = inputPosition;
-                        _trailHolder.transform.position = inputPosition2D;
+                        trail.transform.position = inputPosition;
+                        trail.transform.position = inputPosition2D;
                     }
 
                     touchIds.Add(t.fingerId);
@@ -205,8 +219,8 @@ namespace Terresquall {
                         Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
                         Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
 
-                        _trailHolder.transform.position = inputPosition;
-                        _trailHolder.transform.position = inputPosition2D;
+                        trail.transform.position = inputPosition;
+                        trail.transform.position = inputPosition2D;
                     }
 
                     break;
@@ -307,9 +321,9 @@ namespace Terresquall {
                         //trail rendering
                         Vector3 inputPosition = camera.ScreenToWorldPoint(currentPoint);
                         Vector2 inputPosition2D = camera.ScreenToWorldPoint(currentPoint);
-
-                        _trailHolder.transform.position = inputPosition;
-                        _trailHolder.transform.position = inputPosition2D;
+						
+                        trail.transform.position = inputPosition;
+                        trail.transform.position = inputPosition2D;
                     }
 
                     break;
@@ -358,14 +372,14 @@ namespace Terresquall {
 					}
                     startPoint = currentPoint;
                     touchIds.Remove(t.fingerId);
-                    foreach (Transform trailHolder in transform)
-                    {
-                        foreach (Transform trail in trailHolder.transform)
-                        {
-                            Destroy(trail.gameObject);
-                        }
-                        Destroy(trailHolder.gameObject);                       
-                    }					
+                    //foreach (Transform trailHolder in transform)
+                    //{
+                    //    foreach (Transform trail in trailHolder.transform)
+                    //    {
+                    //        Destroy(trail.gameObject);
+                    //    }
+                    //    Destroy(trailHolder.gameObject);                       
+                    //}		
 					break;
             }
 		}

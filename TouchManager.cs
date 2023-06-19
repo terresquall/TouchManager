@@ -39,9 +39,7 @@ namespace Terresquall {
         // Start is called before the first frame update
         void Start() {
             // Check the assigned trail prefab, and instantiate it if it passes the checks.
-            if(trailPrefab) {
-                GameObject t = Instantiate(trailPrefab,camera.transform);
-            }
+            if(trailPrefab) SetTrail(trailPrefab);
         }
 
         // Delete the current trail and replace it with a new one.
@@ -58,10 +56,10 @@ namespace Terresquall {
 
         // Set trail destroys the existing trail and adds a new trail.
         public void SetTrail(GameObject prefab) {
-            if(trail)
-                Destroy(trail);
+            if(trail) Destroy(trail);
             trailPrefab = prefab;
             trail = Instantiate(prefab,camera.transform);
+            trail.SetActive(false);
         }
 
         void Reset() {
@@ -87,25 +85,36 @@ namespace Terresquall {
         // Makes the mouse input simulate a touch.
         // Simulates all 4 touch states.
         void ReceiveMouseInput() {
-            Touch t = new Touch();
-            t.fingerId = -1;
+            // Terminate if there is no mouse.
+            if(!Input.mousePresent) return;
 
-            // Determines the phase of the touch.
-            if(Input.GetMouseButtonDown(0)) {
-                t.phase = TouchPhase.Began;
+            Touch t = new Touch();
+
+            // Only process if a mouse button is being used, or just being released.
+            if(Input.GetMouseButton(0)) {
+                t.fingerId = -1;
+           
+                // Determines the phase of the touch.
+                if(Input.GetMouseButtonDown(0)) {
+                    t.phase = TouchPhase.Began;
+                } else {
+                    t.deltaPosition = (Vector2)Input.mousePosition - lastMousePosition;
+                    if(t.deltaPosition.sqrMagnitude < 0.1f)
+                        t.phase = TouchPhase.Stationary;
+                    else
+                        t.phase = TouchPhase.Moved;
+                }
+
+                // Record the touch position.
+                t.position = lastMousePosition = Input.mousePosition;
+                ProcessInput(t);
             } else if(Input.GetMouseButtonUp(0)) {
                 t.phase = TouchPhase.Ended;
-            } else if(Input.GetMouseButton(0)) {
-                if(t.deltaPosition.sqrMagnitude < 0.1f)
-                    t.phase = TouchPhase.Stationary;
-                else
-                    t.phase = TouchPhase.Moved;
+
+                // Record the touch position.
+                t.position = lastMousePosition = Input.mousePosition;
+                ProcessInput(t);
             }
-
-            // Record the touch position.
-            t.position = lastMousePosition = Input.mousePosition;
-
-            ProcessInput(t);
         }
 
         // Process a single touch input.
@@ -153,6 +162,7 @@ namespace Terresquall {
                             h.collider.gameObject.SendMessage("OnTouchHold",t,SendMessageOptions.DontRequireReceiver);
                         }
                     }
+                    trail.SetActive(true);
 
                     break;
 
@@ -235,6 +245,8 @@ namespace Terresquall {
                         }
                     }
 
+                    trail.SetActive(true);
+
                     break;
 
                 case TouchPhase.Ended:
@@ -266,12 +278,14 @@ namespace Terresquall {
                         }
                     }
                     touchIds.Remove(t.fingerId);
+
+                    trail.SetActive(false);
 	
                     break;
             }
-
+            
             // Always move the trail to the latest position.
-            trail.transform.position = t.position;
+            trail.transform.position = camera.ScreenToWorldPoint(t.position) - new Vector3(0,0,transform.position.z);
         }
     }
 }

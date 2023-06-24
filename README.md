@@ -26,3 +26,11 @@ To use this, attach the `TouchManager` component to the Main Camera in the Scene
 - `OnTouchUntap2D(Touch t)`
 
 Each of these functions will receive the Touch object that caused the event.
+
+Touch Manager properties
+------------------------
+If you have multiple cameras on the Scene, you will need to attach a Touch Manager for each of them. 
+
+Credits
+-------
+- Gang of Three font from DaFont (https://www.dafont.com/gang-of-three.font)

@@ -10,6 +10,8 @@ namespace Terresquall {
 
         List<int> touchIds = new List<int>();
         public new Camera camera;
+
+        [Header("Detection")]
         public LayerMask affectedLayers = ~0;
 
         public enum DetectionMode {
@@ -18,7 +20,9 @@ namespace Terresquall {
         public DetectionMode detectionMode;
 
         public float precision = 0.2f; // The lower this is, the more precise swipe detection will be.
+        public bool supportsMouse = true;
 
+        [Header("UI")]
         [SerializeField] GameObject trailPrefab; // Attach a trail prefab here and you will get trails when you swipe.
         GameObject trail; // The trail we are using currently.
 
@@ -87,6 +91,7 @@ namespace Terresquall {
         void ReceiveMouseInput() {
             // Terminate if there is no mouse.
             if(!Input.mousePresent) return;
+            if(!supportsMouse) return;
 
             Touch t = new Touch();
 

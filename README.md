@@ -33,4 +33,5 @@ If you have multiple cameras on the Scene, you will need to attach a Touch Manag
 
 Credits
 -------
-- Gang of Three font from DaFont (https://www.dafont.com/gang-of-three.font)
+- Gang of Three font from [DaFont](https://www.dafont.com/gang-of-three.font)
+- Plank background from [PamNawi](https://opengameart.org/content/handpainted-wood)

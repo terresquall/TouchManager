@@ -44,6 +44,11 @@ namespace Terresquall.FruitSlicer {
         public GameObject[] trailSkinPrefabs;
         int currentSkinIndex;
 
+        [Header("Combos")]
+        public float comboTimer = 1f;
+        float comboCountDown;
+        public int comboCounter;
+
         void Start()
         {
             // Set the skin to the last saved one.
@@ -68,13 +73,30 @@ namespace Terresquall.FruitSlicer {
             }
         }
         public float spawnFruitVariance = 10;
+        public float difficultyTimer;
+        float difficultyTimerCountdown;
         private void FixedUpdate()
         {
             if (scene == GameState.Game && !gameOver)
             {
                 SpawnFruit();
                 spawnFruitVariance -= Time.deltaTime;
+
+                difficultyTimerCountdown -= Time.deltaTime;
+                if (difficultyTimerCountdown <= 0)
+                {
+                    DecreaseInterval();
+                }
             }
+
+            comboCountDown -= Time.deltaTime;
+            if (comboCountDown <= 0)
+            {
+                comboCountDown = comboTimer;
+                comboCounter = 0;
+            }
+
+            
         }
         void SpawnFruit()
         {
@@ -98,6 +120,7 @@ namespace Terresquall.FruitSlicer {
                 }
                 else
                 {
+                    StartCoroutine(SlowTime());
                     for (int i = 0; i < Random.Range(5, 8); i++)
                     {
                         Vector3 spawnPos = GetRandomSpawnPosition();
@@ -116,6 +139,12 @@ namespace Terresquall.FruitSlicer {
                 }
 
             }
+        }
+        IEnumerator SlowTime()
+        {
+            Time.timeScale = 0.7f;
+            yield return new WaitForSeconds(1f);
+            Time.timeScale = 1f;
         }
 
         public Vector3 GetRandomSpawnPosition()
@@ -205,6 +234,7 @@ namespace Terresquall.FruitSlicer {
         public void StartGame()
         {
             ChangeState(GameState.Menu);
+            
             StartCoroutine(PlayGame());
         }
 
@@ -215,6 +245,7 @@ namespace Terresquall.FruitSlicer {
 
             Score = 0;
             Penalty = 0;
+            comboCounter = 0;
             UpdateCrosses();
             highScoreText.text = "HighScore: " + PlayerPrefs.GetInt("HighScore", 0).ToString();
 
@@ -225,7 +256,7 @@ namespace Terresquall.FruitSlicer {
             
             yield return new WaitForSeconds(3f);
             ChangeState(GameState.Game);
-
+            difficultyTimer = 20f;
             spawnFruitVariance = 10f; 
         }
         void SaveHighScore()
@@ -252,6 +283,7 @@ namespace Terresquall.FruitSlicer {
         float timeElapsed = 0;
         public IEnumerator LoseGame()
         {
+            Time.timeScale = 1f;
             gameOver = true;
             audio.Stop();
             audio.clip = audioClips[3];
@@ -314,6 +346,19 @@ namespace Terresquall.FruitSlicer {
                     break;
             }
             scene = _gameState;
+        }
+        void DecreaseInterval()
+        {
+            difficultyTimerCountdown = difficultyTimer;
+            spawnInterval -= 0.2f;
+            intervalVariance -= 0.1f;
+            Debug.Log("spawnInterval is" + spawnInterval);
+            Debug.Log("internalVariance is " + intervalVariance);
+        }
+        public void AddCombo()
+        {
+            comboCountDown = comboTimer;
+            comboCounter++;
         }
     }
 }

@@ -106,4 +106,5 @@ MonoBehaviour:
   defaultSpawnFacing: 0
   spawnRange: 45
   fruitSlices: {fileID: 490800639946612367, guid: 38d0c27f8eaa6cf438211812c80240c3, type: 3}
+  comboPopUp: {fileID: 6252658375206313160, guid: f1cefd5be7321b44e8f0098657b6f24e, type: 3}
   onScreen: 0

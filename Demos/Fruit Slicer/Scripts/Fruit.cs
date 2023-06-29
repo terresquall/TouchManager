@@ -13,6 +13,7 @@ namespace Terresquall.FruitSlicer {
 
         
         [SerializeField] GameObject fruitSlices;
+        public Transform comboPopUp;
 
         Rigidbody rb;
         Camera camera;
@@ -51,7 +52,17 @@ namespace Terresquall.FruitSlicer {
                 GameObject fruitSliceObj = Instantiate(fruitSlices, transform);
                 Rigidbody[] sliceRBs = fruitSliceObj.GetComponentsInChildren<Rigidbody>();
 
-                fruitNinjaGameManager.Score++;
+                fruitNinjaGameManager.Score++;               
+                fruitNinjaGameManager.AddCombo();
+                if (fruitNinjaGameManager.comboCounter > 2)
+                {
+                    GameObject[] _popups = GameObject.FindGameObjectsWithTag("PopUpText");
+                    for (int i = 0; i < _popups.Length; i++)
+                    {
+                        Destroy(_popups[i]);
+                    }
+                    ComboPop.Pop(transform.position, fruitNinjaGameManager.comboCounter);
+                }
                 Destroy(gameObject);
             }            
         }
@@ -74,6 +85,16 @@ namespace Terresquall.FruitSlicer {
             }
 
             fruitNinjaGameManager.Score++;
+            fruitNinjaGameManager.AddCombo();
+            if (fruitNinjaGameManager.comboCounter > 2)
+            {
+                GameObject[] _popups = GameObject.FindGameObjectsWithTag("PopUpText");
+                for (int i = 0; i < _popups.Length; i++)
+                {
+                    Destroy(_popups[i]);
+                }
+                ComboPop.Pop(transform.position, fruitNinjaGameManager.comboCounter);
+            }
             Destroy(gameObject);
         }
 

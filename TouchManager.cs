@@ -134,16 +134,24 @@ namespace Terresquall {
                     // Call OnTouchTap2D on 2D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit2D h in hits) {
-                            h.collider.gameObject.SendMessage("OnTouchTap2D",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit2D h in hits)
+                            {
+                                h.collider.gameObject.SendMessage("OnTouchTap2D", t, SendMessageOptions.DontRequireReceiver);
+                            }                       
                         }
                     }
 
                     // Call OnTouchTap on 3D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit[] hits = Physics.RaycastAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit h in hits) {
-                            h.collider.gameObject.SendMessage("OnTouchTap",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit h in hits)
+                            {
+                                h.collider.gameObject.SendMessage("OnTouchTap", t, SendMessageOptions.DontRequireReceiver);
+                            }                       
                         }
                     }
 
@@ -155,16 +163,24 @@ namespace Terresquall {
                     // Call OnTouchHold2D on 2D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit2D h in hits) {
-                            h.collider.gameObject.SendMessage("OnTouchHold2D",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit2D h in hits)
+                            {
+                                h.collider.gameObject.SendMessage("OnTouchHold2D", t, SendMessageOptions.DontRequireReceiver);
+                            }                       
                         }
                     }
 
                     // Call OnTouchHold on 3D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit[] hits = Physics.RaycastAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit h in hits) {
-                            h.collider.gameObject.SendMessage("OnTouchHold",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit h in hits)
+                            {
+                                h.collider.gameObject.SendMessage("OnTouchHold", t, SendMessageOptions.DontRequireReceiver);
+                            }                        
                         }
                     }
                     trail.SetActive(true);
@@ -181,24 +197,33 @@ namespace Terresquall {
 
                         // Do a raycast and check the swipe status of all objects.
                         RaycastHit2D[] hits = Physics2D.LinecastAll(lastMousePosition,t.position,affectedLayers);
-                        foreach(RaycastHit2D h in hits) {
-                            if(swiped2D.Contains(h.collider.gameObject)) {
-                                h.collider.gameObject.SendMessage("OnSwipeStay2D",t,SendMessageOptions.DontRequireReceiver);
-                            } else {
-                                swiped2D.Add(h.collider.gameObject);
-                                h.collider.gameObject.SendMessage("OnSwipeEnter2D",t,SendMessageOptions.DontRequireReceiver);
+                        if (hits != null)
+                        {
+                            foreach (RaycastHit2D h in hits)
+                            {
+                                if (swiped2D.Contains(h.collider.gameObject))
+                                {
+                                    h.collider.gameObject.SendMessage("OnSwipeStay2D", t, SendMessageOptions.DontRequireReceiver);
+                                }
+                                else
+                                {
+                                    swiped2D.Add(h.collider.gameObject);
+                                    h.collider.gameObject.SendMessage("OnSwipeEnter2D", t, SendMessageOptions.DontRequireReceiver);
+                                }
+
+                                // Remove the object if it has been swiped already.
+                                unswiped.Remove(h.collider.gameObject);
                             }
 
-                            // Remove the object if it has been swiped already.
-                            unswiped.Remove(h.collider.gameObject);
+                            // If an object has not been swiped despite being swiped in the last frame,
+                            // that means it is no longer being swiped.
+                            foreach (GameObject go in unswiped)
+                            {
+                                go.SendMessage("OnSwipeExit2D", t, SendMessageOptions.DontRequireReceiver);
+                                swiped2D.Remove(go);
+                            }
                         }
-
-                        // If an object has not been swiped despite being swiped in the last frame,
-                        // that means it is no longer being swiped.
-                        foreach(GameObject go in unswiped) {
-                            go.SendMessage("OnSwipeExit2D",t,SendMessageOptions.DontRequireReceiver);
-                            swiped2D.Remove(go);
-                        }
+                        
                     }
 
                     // Detect swipes with 3D colliders.
@@ -230,24 +255,32 @@ namespace Terresquall {
                             }
                         }
 
-                        foreach(RaycastHit h in hits) {
-                            if(swiped.Contains(h.collider.gameObject)) {
-                                h.collider.gameObject.SendMessage("OnSwipeStay",t,SendMessageOptions.DontRequireReceiver);
-                            } else {
-                                swiped.Add(h.collider.gameObject);
-                                h.collider.gameObject.SendMessage("OnSwipeEnter",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit h in hits)
+                            {
+                                if (swiped.Contains(h.collider.gameObject))
+                                {
+                                    h.collider.gameObject.SendMessage("OnSwipeStay", t, SendMessageOptions.DontRequireReceiver);
+                                }
+                                else
+                                {
+                                    swiped.Add(h.collider.gameObject);
+                                    h.collider.gameObject.SendMessage("OnSwipeEnter", t, SendMessageOptions.DontRequireReceiver);
+                                }
+
+                                // Remove the object if it has been swiped already.
+                                unswiped.Remove(h.collider.gameObject);
                             }
 
-                            // Remove the object if it has been swiped already.
-                            unswiped.Remove(h.collider.gameObject);
-                        }
-
-                        // If an object has not been swiped despite being swiped in the last frame,
-                        // that means it is no longer being swiped.
-                        foreach(GameObject go in unswiped) {
-                            go.SendMessage("OnSwipeExit",t,SendMessageOptions.DontRequireReceiver);
-                            swiped.Remove(go);
-                        }
+                            // If an object has not been swiped despite being swiped in the last frame,
+                            // that means it is no longer being swiped.
+                            foreach (GameObject go in unswiped)
+                            {
+                                go.SendMessage("OnSwipeExit", t, SendMessageOptions.DontRequireReceiver);
+                                swiped.Remove(go);
+                            }
+                        }                     
                     }
 
                     trail.SetActive(true);
@@ -260,27 +293,42 @@ namespace Terresquall {
                     // Call OnSwipeExit2D / OnTouchUntap2D on 2D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit2D h in hits) {
-                            if(swiped2D.Contains(h.collider.gameObject)) {
-                                swiped2D.Remove(h.collider.gameObject);
-                                h.collider.gameObject.SendMessage("OnSwipeExit2D",t,SendMessageOptions.DontRequireReceiver);
-                            } else {
-                                h.collider.gameObject.SendMessage("OnTouchUntap2D",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit2D h in hits)
+                            {
+                                if (swiped2D.Contains(h.collider.gameObject))
+                                {
+                                    swiped2D.Remove(h.collider.gameObject);
+                                    h.collider.gameObject.SendMessage("OnSwipeExit2D", t, SendMessageOptions.DontRequireReceiver);
+                                }
+                                else
+                                {
+                                    h.collider.gameObject.SendMessage("OnTouchUntap2D", t, SendMessageOptions.DontRequireReceiver);
+                                }
                             }
-                        }
+                        }                       
                     }
 
                     // Call OnSwipeExit / OnTouchUntap on 3D objects.
                     if(detectionMode != DetectionMode.physics) {
                         RaycastHit[] hits = Physics.RaycastAll(r,Mathf.Infinity,affectedLayers);
-                        foreach(RaycastHit h in hits) {
-                            if(swiped.Contains(h.collider.gameObject)) {
-                                swiped.Remove(h.collider.gameObject);
-                                h.collider.gameObject.SendMessage("OnSwipeExit",t,SendMessageOptions.DontRequireReceiver);
-                            } else {
-                                h.collider.gameObject.SendMessage("OnTouchUntap",t,SendMessageOptions.DontRequireReceiver);
+                        if(hits != null)
+                        {
+                            foreach (RaycastHit h in hits)
+                            {
+                                if (swiped.Contains(h.collider.gameObject))
+                                {
+                                    swiped.Remove(h.collider.gameObject);
+                                    h.collider.gameObject.SendMessage("OnSwipeExit", t, SendMessageOptions.DontRequireReceiver);
+                                }
+                                else
+                                {
+                                    h.collider.gameObject.SendMessage("OnTouchUntap", t, SendMessageOptions.DontRequireReceiver);
+                                }
                             }
                         }
+                        
                     }
                     touchIds.Remove(t.fingerId);
 

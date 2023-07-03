@@ -330,15 +330,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3738290327001625304, guid: 86e447de6c387da489d07c9a3cc75729, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -189.55249
+      value: -243.3
       objectReference: {fileID: 0}
     - target: {fileID: 3738290327001625304, guid: 86e447de6c387da489d07c9a3cc75729, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -82.436325
+      value: -91.4
       objectReference: {fileID: 0}
     - target: {fileID: 3738290327001625304, guid: 86e447de6c387da489d07c9a3cc75729, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 56.82669
+      value: 48.7
       objectReference: {fileID: 0}
     - target: {fileID: 3738290327001625304, guid: 86e447de6c387da489d07c9a3cc75729, type: 3}
       propertyPath: m_LocalRotation.w
@@ -410,7 +410,7 @@ MonoBehaviour:
   disableUI: {fileID: 789669308}
   enableUI: {fileID: 1590153855}
   functionInt: 1
-  screenPos: {x: 0, y: 0, z: 0}
+  screenPos: {x: 0.5, y: 180, z: 0}
 --- !u!1001 &3620789316354218681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -543,6 +543,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 919421948, guid: e101e626fa654344480a4d76efa69956, type: 3}
+    - target: {fileID: 3459483194057385431, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10.000153
+      objectReference: {fileID: 0}
     - target: {fileID: 4007643528035933490, guid: e69b65d4b17c7b143b65760670daa435, type: 3}
       propertyPath: m_RootOrder
       value: 1

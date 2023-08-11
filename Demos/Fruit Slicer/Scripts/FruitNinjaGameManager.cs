@@ -18,7 +18,7 @@ namespace Terresquall.FruitSlicer {
         [SerializeField] AudioClip[] audioClips;
 
         [Header("Game Stuff")]
-        [SerializeField] UIScreen loseScreen;
+        [SerializeField] UIScreen[] screens; // 0 is main menu, 1 is pause, 2 is lose, 3 is game, 4 is options
         [SerializeField] TextMeshProUGUI[] scoreTexts;
         bool gameOver = false;
 
@@ -34,8 +34,11 @@ namespace Terresquall.FruitSlicer {
         public int score;
         public int penalty;
         [SerializeField] GameObject[] crossFills;
-        
+
         [Header("UI")]
+        [SerializeField] Transform playButton;
+        [SerializeField] GameObject startFruit;
+        [SerializeField] Vector3 startFruitPos;
         public TextMeshProUGUI scoreText;
         [SerializeField] TextMeshProUGUI pauseScoreText;
         [SerializeField] TextMeshProUGUI endScoreText;
@@ -233,14 +236,20 @@ namespace Terresquall.FruitSlicer {
         }
         public void StartGame()
         {
-            ChangeState(GameState.Menu);
+            //ChangeState(GameState.Menu);
             
             StartCoroutine(PlayGame());
         }
 
         //functions
         public IEnumerator PlayGame()
-        {            
+        {
+            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < screens.Length; i++)
+            {
+                screens[i].Close();
+            }
+            screens[3].Open();
             gameOver = false;
 
             Score = 0;
@@ -273,10 +282,16 @@ namespace Terresquall.FruitSlicer {
             SaveHighScore();
             gameOver = false;
             ChangeState(GameState.Menu);
+            scene = GameState.Menu;
         }
 
         public void PauseGame()
         {
+            for (int i = 0; i < screens.Length; i++)
+            {
+                screens[i].Close();
+            }
+            screens[1].Open();
             pauseScoreText.text = Score.ToString();           
         }
 
@@ -297,7 +312,7 @@ namespace Terresquall.FruitSlicer {
                 Destroy(_fruits[i]);
             }
 
-            loseScreen.Open();
+            screens[2].Open();
             timeElapsed = 0;
             while (timeElapsed < 1f)
             {
@@ -320,6 +335,12 @@ namespace Terresquall.FruitSlicer {
             switch (_gameState)
             {
                 case GameState.Menu:
+                    for(int i = 0; i < screens.Length; i++)
+                    {
+                        screens[i].Close();
+                    }
+                    screens[0].Open();
+                    Instantiate(startFruit, playButton);
                     Time.timeScale = 1f;
 
                     audio.Stop();
@@ -337,7 +358,7 @@ namespace Terresquall.FruitSlicer {
 
                 case GameState.Game:
                     Time.timeScale = 1f;
-
+                    
                     audio.Stop();
                     audio.clip = audioClips[1];
                     audio.loop = true;
